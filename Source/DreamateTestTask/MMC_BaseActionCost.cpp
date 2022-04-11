@@ -26,13 +26,8 @@ float UMMC_BaseActionCost::CalculateBaseMagnitude_Implementation(const FGameplay
 
 	float StaminaValue = 0.f;
 	GetCapturedAttributeMagnitude(Stamina, Spec, EvaluationParameters, StaminaValue);
-
-	if (StaminaValue == 0.f)
-	{
-		return BaseActionStaminaCost;
-	}
 	
-	if (StaminaValue < BaseActionStaminaCost)
+	if (StaminaValue < BaseActionStaminaCost && StaminaValue > 10.f)
 	{
 		return StaminaValue;
 	}

@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FloatingBarWidget.h"
 #include "GASBaseCharacter.h"
 #include "Components/WidgetComponent.h"
 #include "Engine/TargetPoint.h"
+#include "Public/UI/FloatingBarWidget.h"
 #include "GASBaseEnemy.generated.h"
 
 /**

@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTaskChasePlayer.h"
+#include "DreamateTestTask/Public/BehaviorTreeTask/BTTaskChasePlayer.h"
 
-#include "EnemyController.h"
+#include "DreamateTestTask/EnemyController.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"

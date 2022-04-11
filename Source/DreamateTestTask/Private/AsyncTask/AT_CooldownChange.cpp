@@ -1,10 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AT_CooldownChange.h"
-
-#include <chrono>
-
+#include "DreamateTestTask/Public/AsyncTask/AT_CooldownChange.h"
 #include "Blueprint/AsyncTaskDownloadImage.h"
 
 UAT_CooldownChange* UAT_CooldownChange::ListenForCooldownChange(UAbilitySystemComponent* AbilitySystemComponent,

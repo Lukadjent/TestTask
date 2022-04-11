@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CharacterHUDWidget.h"
 #include "GameFramework/HUD.h"
+#include "Public/UI/CharacterHUDWidget.h"
 #include "MainHUD.generated.h"
 
 /**

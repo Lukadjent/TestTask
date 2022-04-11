@@ -79,4 +79,3 @@ void UInventoryComponent::SwitchWeapon(const EWeaponType NewWeapon) const
 		//GiveNewOne;	
 	}
 }
-

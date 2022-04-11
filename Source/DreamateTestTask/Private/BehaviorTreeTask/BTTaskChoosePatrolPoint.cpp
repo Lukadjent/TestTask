@@ -1,11 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
-#include "BTTaskChoosePatrolPoint.h"
-
-#include "EnemyController.h"
-#include "GASBaseEnemy.h"
+#include "DreamateTestTask/Public/BehaviorTreeTask/BTTaskChoosePatrolPoint.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "DreamateTestTask/EnemyController.h"
+#include "DreamateTestTask/GASBaseEnemy.h"
 
 UBTTaskChoosePatrolPoint::UBTTaskChoosePatrolPoint()
 {

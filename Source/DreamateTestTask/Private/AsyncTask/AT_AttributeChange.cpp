@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
-#include "AT_AttributeChange.h"
+#include "DreamateTestTask/Public/AsyncTask/AT_AttributeChange.h"
 
 UAT_AttributeChange* UAT_AttributeChange::ListenForAttributeChange(
 	UAbilitySystemComponent* AbilitySystemComponent, FGameplayAttribute Attribute)
