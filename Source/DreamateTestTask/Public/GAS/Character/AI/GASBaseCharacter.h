@@ -2,6 +2,8 @@
 
 #pragma once
 
+class UInventoryComponent;
+
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
@@ -10,6 +12,8 @@
 #include "Enum/EWeaponType.h"
 #include "GameFramework/Character.h"
 #include "GAS/AttributeSet/BaseAttributeSet.h"
+#include "Inventory/InventoryComponent.h"
+#include "Inventory/InventoryTypes.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "GASBaseCharacter.generated.h"
 
@@ -36,6 +40,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Inventory")
+	UInventoryComponent* Inventory;
+
 #pragma region GameplayAbilitySystem
 	
 	UPROPERTY(EditDefaultsOnly)
@@ -48,12 +55,17 @@ protected:
 	TArray<TSubclassOf<class UGameplayEffect>> StartupEffects;
 
 	void InitializeDefaultAttributesAndEffects();
+
+	TMap<FItemSlot, FGameplayAbilitySpecHandle> SlottedAbilities;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
+	TMap<FItemSlot, TSubclassOf<UGameplayAbility>> DefaultSlottedAbilities;
 	
 public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UGameplayEffect> SetDamageGameplayEffect;
-
+	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TSubclassOf<class UGameplayEffect> DefaultAttributes;
 	
@@ -62,6 +74,18 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	EWeaponType Weapon;
+
+	UFUNCTION()
+	bool ActivateAbilitiesWithItemSlot(FItemSlot ItemSlot);
+
+	UFUNCTION(BlueprintCallable, Category = "Ability")
+	void RemoveSlottedGameplayAbilities(FItemSlot InSlot);
+
+	UFUNCTION()
+	void AddSlottedGameplayAbilites();
+
+	UFUNCTION()
+	void FillSlottedAbilitySpecs(TMap<FItemSlot, FGameplayAbilitySpec>& SlottedAbilitySpecs);
 
 #pragma endregion 
 	

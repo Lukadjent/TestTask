@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Item.h"
-#include "DreamateTestTask/Public/GAS/Character/AI/GASBaseCharacter.h"
+#include "InventoryTypes.h"
 #include "Components/ActorComponent.h"
-#include "Consumable/Consumable.h"
-#include "Weapon/Weapon.h"
+#include "EnvironmentQuery/EnvQueryDebugHelpers.h"
+#include "Item/ItemData.h"
 #include "InventoryComponent.generated.h"
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DREAMATETESTTASK_API UInventoryComponent : public UActorComponent
@@ -19,48 +19,67 @@ public:
 	// Sets default values for this component's properties
 	UInventoryComponent();
 
+	FItemSlot* EquippedWeapon;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	TMap<TSubclassOf<AItem>, int> Inventory;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")
+	TMap<UItemData*, FItemDataStruct> InventoryData;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Inventory|Default")
-	TMap<TSubclassOf<AItem>, int> DefaultSlots;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")
+	TMap<FItemSlot, UItemData*> SlottedItems;
 
-	TSubclassOf<AWeapon> EquippedWeapon;
+	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+	FOnInventoryItemChanged OnInventoryItemChanged;
 
-	TSubclassOf<AConsumable> EquippedConsumable;
+	FOnInventoryItemChangedNative OnInventoryItemChangedNative;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Inventory|Default")
-	TSubclassOf<AWeapon> DefaultEquippedWeapon;
+	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+	FOnSlottedItemChanged OnSlottedItemChanged;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Inventory|Default")
-	TSubclassOf<AConsumable> DefaultEquippedConsumable;
+	FOnSlottedItemChangedNative OnSlottedItemChangedNative;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Inventory")
+	void InventoryItemChanged(bool bAdded, UItemData* Item);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Inventory")
+	void SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool AddInventoryItem(UItemData* NewItem, int32 ItemCount = 1, bool bAutoSlot = true);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool RemoveInventoryItem(UItemData* RemovedItem, int32 RemoveCount = 1);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void GetInventoryItemsOfType(TArray<UItemData*> Items, FPrimaryAssetType InType);
+
+	UFUNCTION(BlueprintPure, Category = "Inventory")
+	int32 GetInventoryItemCount(UItemData* Item);
+
+	UFUNCTION(BlueprintPure, Category = "Inventory")
+	bool GetInventoryItemData(UItemData* Item, FItemDataStruct ItemData) const;
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool SetSlottedItem(FItemSlot Slot, UItemData* Item);
 	
-	
-	void AddDefaults();
+	UFUNCTION(BlueprintPure, Category = "Inventory")
+	UItemData* GetSlottedItem(FItemSlot Slot);
 
-	void Initialize();
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void GetSlottedItems(TArray<UItemData*>& Items, FPrimaryAssetType Type, bool bOutputEmptyIndexes);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void FillEmptySlots();
+
+	void NotifyInventoryItemChanged(bool bAdded, UItemData* Item);
+	void NotifySlottedItemChanged(FItemSlot Slot, UItemData* Item);
 	
 public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(BlueprintCallable)
-	void EquipWeapon(TSubclassOf<AWeapon> Weapon);
+	const TMap<UItemData*, FItemDataStruct>& GetInventoryDataMap() const;
 
-	void EquipConsumable(TSubclassOf<AConsumable> Consumable);
-
-	void Unequip(TSubclassOf<AItem> Item);
-	
-	void AddItem(TSubclassOf<AItem> Item, int Quantity);
-
-	void SwitchWeapon(const EWeaponType NewWeapon) const;
-
-	UPROPERTY()
-	AGASBaseCharacter* Owner;
-
-	TTuple<TSubclassOf<AConsumable>, int> GetEquippedConsumable() const;
-	
+	const TMap<FItemSlot, UItemData*>& GetSlottedItemMap() const;
 };

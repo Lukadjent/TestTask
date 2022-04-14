@@ -2,6 +2,9 @@
 
 
 #include "GAS/Character/AI/GASBaseCharacter.h"
+
+#include <wrl/client.h>
+
 #include "DreamateTestTask/Public/Inventory/Weapon/Weapon.h"
 
 // Sets default values
@@ -16,6 +19,7 @@ AGASBaseCharacter::AGASBaseCharacter()
 	WeaponComponent = CreateDefaultSubobject<UChildActorComponent>("WeaponComponent");
 	/*WeaponComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules((EAttachmentRule::SnapToTarget), false), "middle_02_r");*/
 	WeaponComponent->SetupAttachment(GetMesh(), "Weapon_r");
+	Inventory = CreateDefaultSubobject<UInventoryComponent>("Inventory");
 }
 
 UAbilitySystemComponent* AGASBaseCharacter::GetAbilitySystemComponent() const
@@ -61,6 +65,63 @@ void AGASBaseCharacter::InitializeDefaultAttributesAndEffects()
 		}
 	}
 }
+
+bool AGASBaseCharacter::ActivateAbilitiesWithItemSlot(FItemSlot ItemSlot)
+{
+	const FGameplayAbilitySpecHandle* SpecHandle = SlottedAbilities.Find(ItemSlot);
+	if (SpecHandle && AbilitySystemComponent)
+	{
+		return AbilitySystemComponent->TryActivateAbility(*SpecHandle);
+	}
+	return false;
+}
+
+void AGASBaseCharacter::RemoveSlottedGameplayAbilities(FItemSlot InSlot)
+{
+	if (const FGameplayAbilitySpecHandle* SpecHandle  = SlottedAbilities.Find(InSlot))
+	{
+		AbilitySystemComponent->ClearAbility(*SpecHandle);
+	}
+	SlottedAbilities.Emplace(InSlot, FGameplayAbilitySpecHandle());
+}
+
+void AGASBaseCharacter::AddSlottedGameplayAbilites()
+{
+	TMap<FItemSlot, FGameplayAbilitySpec> SlottedAbilitySpecs;
+	FillSlottedAbilitySpecs(SlottedAbilitySpecs);
+	for (const TPair<FItemSlot, FGameplayAbilitySpec>& SpecPair : SlottedAbilitySpecs)
+	{
+		FGameplayAbilitySpecHandle& SpecHandle = SlottedAbilities.FindOrAdd(SpecPair.Key);
+		if (!SpecHandle.IsValid())
+		{
+			SpecHandle = AbilitySystemComponent->GiveAbility(SpecPair.Value);
+		}
+	}
+}
+
+void AGASBaseCharacter::FillSlottedAbilitySpecs(TMap<FItemSlot, FGameplayAbilitySpec>& SlottedAbilitySpecs)
+{
+	for (const TPair<FItemSlot, TSubclassOf<UGameplayAbility>>& DefaultPair : DefaultSlottedAbilities)
+	{
+		if (DefaultPair.Value.Get())
+		{
+			SlottedAbilitySpecs.Add(DefaultPair.Key, FGameplayAbilitySpec(DefaultPair.Value));
+		}
+	}
+	if (Inventory)
+	{
+		const TMap<FItemSlot, UItemData*>& SlottedItemMap = Inventory->GetSlottedItemMap();
+		for (const TPair<FItemSlot, UItemData*>& ItemPair : SlottedItemMap) 
+		{
+			const UItemData* SlottedItem = ItemPair.Value;
+			if (SlottedItem && SlottedItem->GrantedAbility)
+			{
+				SlottedAbilitySpecs.Add(ItemPair.Key,FGameplayAbilitySpec(SlottedItem->GrantedAbility));
+			}
+		}
+	}
+}
+
 
 // Called every frame
 void AGASBaseCharacter::Tick(float DeltaTime)

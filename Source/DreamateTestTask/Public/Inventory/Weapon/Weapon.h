@@ -6,11 +6,10 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "GAS/Character/AI/GASBaseCharacter.h"
-#include "Inventory/Item.h"
 #include "Weapon.generated.h"
 
 UCLASS()
-class DREAMATETESTTASK_API AWeapon : public AItem
+class DREAMATETESTTASK_API AWeapon : public AActor
 {
 	GENERATED_BODY()
 	
