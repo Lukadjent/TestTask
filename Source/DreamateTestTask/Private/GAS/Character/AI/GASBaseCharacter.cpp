@@ -2,9 +2,6 @@
 
 
 #include "GAS/Character/AI/GASBaseCharacter.h"
-
-#include <wrl/client.h>
-
 #include "DreamateTestTask/Public/Inventory/Weapon/Weapon.h"
 
 // Sets default values
