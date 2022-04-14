@@ -19,7 +19,7 @@ public:
 	// Sets default values for this component's properties
 	UInventoryComponent();
 
-	FItemSlot* EquippedWeapon;
+	FItemSlot EquippedWeapon;
 
 protected:
 	// Called when the game starts

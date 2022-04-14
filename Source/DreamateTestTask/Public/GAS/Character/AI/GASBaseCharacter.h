@@ -62,18 +62,12 @@ protected:
 	TMap<FItemSlot, TSubclassOf<UGameplayAbility>> DefaultSlottedAbilities;
 	
 public:
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UGameplayEffect> SetDamageGameplayEffect;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TSubclassOf<class UGameplayEffect> DefaultAttributes;
 	
 	UPROPERTY(EditDefaultsOnly)
 	TMap<EAbilities, TSubclassOf<UGameplayAbility>> StandardAbilities;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	EWeaponType Weapon;
 
 	UFUNCTION()
 	bool ActivateAbilitiesWithItemSlot(FItemSlot ItemSlot);
@@ -82,7 +76,7 @@ public:
 	void RemoveSlottedGameplayAbilities(FItemSlot InSlot);
 
 	UFUNCTION()
-	void AddSlottedGameplayAbilites();
+	void AddSlottedGameplayAbilities();
 
 	UFUNCTION()
 	void FillSlottedAbilitySpecs(TMap<FItemSlot, FGameplayAbilitySpec>& SlottedAbilitySpecs);
@@ -93,6 +87,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	void Attack();
+	bool Attack();
 	
 };

@@ -14,9 +14,9 @@ EBTNodeResult::Type UBTTaskAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 {
 	if (const AEnemyController* AIController = Cast<AEnemyController>(OwnerComp.GetOwner()))
 	{
-		if (const AGASBaseEnemy* Pawn = Cast<AGASBaseEnemy>(AIController->GetPawn()))
+		if (AGASBaseEnemy* Pawn = Cast<AGASBaseEnemy>(AIController->GetPawn()))
 		{
-			if (Pawn->GetAbilitySystemComponent()->TryActivateAbilityByClass(Pawn->StandardAbilities[EAbilities::Attack]))
+			if (Pawn->Attack())
 			{
 				return EBTNodeResult::Succeeded;
 			}

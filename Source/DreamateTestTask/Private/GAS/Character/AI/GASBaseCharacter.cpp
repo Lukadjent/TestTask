@@ -14,7 +14,6 @@ AGASBaseCharacter::AGASBaseCharacter()
 	StimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(
 		TEXT("PerceptionStimuliSourceComponent"));
 	WeaponComponent = CreateDefaultSubobject<UChildActorComponent>("WeaponComponent");
-	/*WeaponComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules((EAttachmentRule::SnapToTarget), false), "middle_02_r");*/
 	WeaponComponent->SetupAttachment(GetMesh(), "Weapon_r");
 	Inventory = CreateDefaultSubobject<UInventoryComponent>("Inventory");
 }
@@ -82,7 +81,7 @@ void AGASBaseCharacter::RemoveSlottedGameplayAbilities(FItemSlot InSlot)
 	SlottedAbilities.Emplace(InSlot, FGameplayAbilitySpecHandle());
 }
 
-void AGASBaseCharacter::AddSlottedGameplayAbilites()
+void AGASBaseCharacter::AddSlottedGameplayAbilities()
 {
 	TMap<FItemSlot, FGameplayAbilitySpec> SlottedAbilitySpecs;
 	FillSlottedAbilitySpecs(SlottedAbilitySpecs);
@@ -127,7 +126,7 @@ void AGASBaseCharacter::Tick(float DeltaTime)
 
 }
 
-void AGASBaseCharacter::Attack()
+bool AGASBaseCharacter::Attack()
 {
-	AbilitySystemComponent->TryActivateAbilityByClass(StandardAbilities[EAbilities::Attack]);
+	return ActivateAbilitiesWithItemSlot(Inventory->EquippedWeapon);
 }

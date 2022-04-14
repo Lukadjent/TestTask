@@ -32,9 +32,6 @@ protected:
 	UBoxComponent* BoxCollisionComponent;
 
 	UPROPERTY(EditDefaultsOnly)
-	FTransform StaticMeshTransform;
-
-	UPROPERTY(EditDefaultsOnly)
 	FTransform BoxCollisionTransform;
 
 public:	
@@ -42,6 +39,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapon")
+	UItemData* ItemData;
 	
 	UPROPERTY(BlueprintReadOnly)
 	int AttackCounter = 0;
