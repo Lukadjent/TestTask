@@ -8,6 +8,7 @@
 #include "GAS/Character/AI/GASBaseCharacter.h"
 #include "Weapon.generated.h"
 
+class UWeaponItemData;
 UCLASS()
 class DREAMATETESTTASK_API AWeapon : public AActor
 {
@@ -41,7 +42,10 @@ public:
 protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapon")
-	UItemData* ItemData;
+	UWeaponItemData* ItemData;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapon")
+	FItemSlot Slot;
 	
 	UPROPERTY(BlueprintReadOnly)
 	int AttackCounter = 0;
