@@ -2,6 +2,10 @@
 
 #include "Inventory/InventoryComponent.h"
 
+#include "GAS/Character/AI/GASBaseCharacter.h"
+#include "Inventory/Item/ItemAssetManager.h"
+#include "Inventory/Item/WeaponItemData.h"
+
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
 {
@@ -15,7 +19,20 @@ UInventoryComponent::UInventoryComponent()
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+}
+
+void UInventoryComponent::SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item)
+{
+	if (UChildActorComponent* Weapon = GetOwner()->FindComponentByClass<UChildActorComponent>())
+	{
+		if (ItemSlot.GetItemType() == UItemAssetManager::WeaponItemType)
+		{
+			if (const UWeaponItemData* WeaponData = Cast<UWeaponItemData>(Item))
+			{
+				Weapon->SetChildActorClass(WeaponData->GetWeaponClass());	
+			}
+		}
+	}
 }
 
 bool UInventoryComponent::AddInventoryItem(UItemData* NewItem, int32 ItemCount, bool bAutoSlot)
@@ -87,7 +104,7 @@ bool UInventoryComponent::RemoveInventoryItem(UItemData* RemovedItem, int32 Remo
 	return true;
 }
 
-void UInventoryComponent::GetInventoryItemsOfType(TArray<UItemData*> Items, FPrimaryAssetType InType)
+void UInventoryComponent::GetInventoryItemsOfType(TArray<UItemData*>& Items, FPrimaryAssetType InType)
 {
 	for (const TPair<UItemData*, FItemDataStruct>& Pair : InventoryData)
 	{

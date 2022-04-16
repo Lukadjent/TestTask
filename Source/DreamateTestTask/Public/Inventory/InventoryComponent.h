@@ -44,7 +44,7 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Inventory")
 	void InventoryItemChanged(bool bAdded, UItemData* Item);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Inventory")
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	void SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
@@ -54,7 +54,7 @@ protected:
 	bool RemoveInventoryItem(UItemData* RemovedItem, int32 RemoveCount = 1);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	void GetInventoryItemsOfType(TArray<UItemData*> Items, FPrimaryAssetType InType);
+	void GetInventoryItemsOfType(TArray<UItemData*>& Items, FPrimaryAssetType InType);
 
 	UFUNCTION(BlueprintPure, Category = "Inventory")
 	int32 GetInventoryItemCount(UItemData* Item);
@@ -76,7 +76,7 @@ protected:
 
 	void NotifyInventoryItemChanged(bool bAdded, UItemData* Item);
 	void NotifySlottedItemChanged(FItemSlot Slot, UItemData* Item);
-	
+
 public:	
 
 	const TMap<UItemData*, FItemDataStruct>& GetInventoryDataMap() const;

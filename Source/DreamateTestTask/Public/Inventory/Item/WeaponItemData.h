@@ -18,6 +18,13 @@ class DREAMATETESTTASK_API UWeaponItemData : public UItemData
 
 	UWeaponItemData();
 
+public:
+	
+	TSubclassOf<AWeapon> GetWeaponClass() const
+	{
+		return WeaponActor;
+	}
+	
 protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")

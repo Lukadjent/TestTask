@@ -24,6 +24,11 @@ struct DREAMATETESTTASK_API FItemSlot
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	int32 SlotNumber;
 
+	FPrimaryAssetType GetItemType()
+	{
+		return ItemType;
+	}
+	
 	bool operator==(const FItemSlot& Other) const 
 	{
 		return ItemType == Other.ItemType && SlotNumber == Other.SlotNumber;

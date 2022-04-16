@@ -11,6 +11,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "UI/InventoryWidget.h"
 #include "MainCharacterController.generated.h"
 
 /**
@@ -56,7 +57,8 @@ public:
 	UInputAction* CameraAttachAction;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
     UInputAction* CameraRotationAction;
-	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
+	UInputAction* InventoryAction;	
 	
 	// CONTROL INPUT MAPPINGS //
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Mappings")
@@ -90,8 +92,20 @@ public:
 	void Roll();
 	void Parry();
 	void CastSpell();
+	void Inventory();
 	
 #pragma endregion
+
+#pragma region INVENTORY
+	
+	UPROPERTY(BlueprintReadOnly)
+	UInventoryWidget* InventoryWidget;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
+	TSubclassOf<UUserWidget> InventoryWidgetClass;
+	//UPROPERTY()
+
+#pragma endregion 
 
 private:
 

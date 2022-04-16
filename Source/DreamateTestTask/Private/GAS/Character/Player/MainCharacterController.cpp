@@ -91,6 +91,10 @@ void AMainCharacterController::SetupInputComponent()
 		{
 			EnhancedInputComponent->BindAction(CastSpellAction, ETriggerEvent::Started, this, &AMainCharacterController::CastSpell);
 		}
+		if (InventoryAction)
+		{
+			EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AMainCharacterController::Inventory);
+		}
 	}
 }
 
@@ -176,6 +180,16 @@ void AMainCharacterController::Parry()
 void AMainCharacterController::CastSpell()
 {
 	MainCharacter->CastSpell();
+}
+
+void AMainCharacterController::Inventory()
+{
+	InventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), InventoryWidgetClass);
+	if (InventoryWidget)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Hello"));
+		InventoryWidget->AddToViewport();
+	}
 }
 
 FGenericTeamId AMainCharacterController::GetGenericTeamId() const
