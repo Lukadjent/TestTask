@@ -58,7 +58,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
     UInputAction* CameraRotationAction;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
-	UInputAction* InventoryAction;	
+	UInputAction* InventoryAction;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
+	UInputAction* UseConsumableAction;
 	
 	// CONTROL INPUT MAPPINGS //
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Mappings")
@@ -93,6 +95,7 @@ public:
 	void Parry();
 	void CastSpell();
 	void Inventory();
+	void UseConsumable();
 	
 #pragma endregion
 
@@ -103,7 +106,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
 	TSubclassOf<UUserWidget> InventoryWidgetClass;
-	//UPROPERTY()
+	UPROPERTY()
+	bool bIsOpened = false;
 
 #pragma endregion 
 

@@ -31,5 +31,6 @@ float UMMC_BaseActionCost::CalculateBaseMagnitude_Implementation(const FGameplay
 	{
 		return StaminaValue;
 	}
+
 	return BaseActionStaminaCost;
 }

@@ -2,6 +2,7 @@
 
 
 #include "GAS/Character/AI/GASBaseCharacter.h"
+#include "Inventory/InventoryComponent.h"
 #include "DreamateTestTask/Public/Inventory/Weapon/Weapon.h"
 
 // Sets default values
@@ -97,13 +98,6 @@ void AGASBaseCharacter::AddSlottedGameplayAbilities()
 
 void AGASBaseCharacter::FillSlottedAbilitySpecs(TMap<FItemSlot, FGameplayAbilitySpec>& SlottedAbilitySpecs)
 {
-	for (const TPair<FItemSlot, TSubclassOf<UGameplayAbility>>& DefaultPair : DefaultSlottedAbilities)
-	{
-		if (DefaultPair.Value.Get())
-		{
-			SlottedAbilitySpecs.Add(DefaultPair.Key, FGameplayAbilitySpec(DefaultPair.Value));
-		}
-	}
 	if (Inventory)
 	{
 		const TMap<FItemSlot, UItemData*>& SlottedItemMap = Inventory->GetSlottedItemMap();

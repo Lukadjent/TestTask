@@ -95,6 +95,10 @@ void AMainCharacterController::SetupInputComponent()
 		{
 			EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AMainCharacterController::Inventory);
 		}
+		if (UseConsumableAction)
+		{
+			EnhancedInputComponent->BindAction(UseConsumableAction, ETriggerEvent::Started, this, &AMainCharacterController::UseConsumable);
+		}
 	}
 }
 
@@ -187,9 +191,13 @@ void AMainCharacterController::Inventory()
 	InventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), InventoryWidgetClass);
 	if (InventoryWidget)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Hello"));
 		InventoryWidget->AddToViewport();
 	}
+}
+
+void AMainCharacterController::UseConsumable()
+{
+	MainCharacter->UseConsumable();
 }
 
 FGenericTeamId AMainCharacterController::GetGenericTeamId() const

@@ -4,3 +4,4 @@
 
 const FPrimaryAssetType UItemAssetManager::WeaponItemType = TEXT("Weapon");
 const FPrimaryAssetType UItemAssetManager::PotionItemType = TEXT("Potion");
+const FPrimaryAssetType UItemAssetManager::None = TEXT("None");

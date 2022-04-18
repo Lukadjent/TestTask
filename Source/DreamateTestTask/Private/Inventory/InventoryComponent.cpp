@@ -3,6 +3,7 @@
 #include "Inventory/InventoryComponent.h"
 
 #include "GAS/Character/AI/GASBaseCharacter.h"
+#include "GAS/Character/AI/GASBaseCharacter.h"
 #include "Inventory/Item/ItemAssetManager.h"
 #include "Inventory/Item/WeaponItemData.h"
 
@@ -14,28 +15,57 @@ UInventoryComponent::UInventoryComponent()
 	
 }
 
+void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+	FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if(Owner)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, FString::Printf(TEXT("%d ---- %s"), InventoryData.Num(), *Owner->GetName()));		
+	}
+}
+
 
 // Called when the game starts
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	Owner = Cast<AGASBaseCharacter>(GetOwner());
+	Initialize();
 }
 
 void UInventoryComponent::SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item)
 {
-	if (UChildActorComponent* Weapon = GetOwner()->FindComponentByClass<UChildActorComponent>())
+	if (Owner && ItemSlot.GetItemType() == UItemAssetManager::WeaponItemType)
 	{
-		if (ItemSlot.GetItemType() == UItemAssetManager::WeaponItemType)
+		if (const UWeaponItemData* WeaponData = Cast<UWeaponItemData>(Item))
 		{
-			if (const UWeaponItemData* WeaponData = Cast<UWeaponItemData>(Item))
-			{
-				Weapon->SetChildActorClass(WeaponData->GetWeaponClass());	
-			}
+			Owner->WeaponComponent->SetChildActorClass(WeaponData->GetWeaponClass());
+			EquippedWeapon = ItemSlot;
 		}
 	}
 }
 
-bool UInventoryComponent::AddInventoryItem(UItemData* NewItem, int32 ItemCount, bool bAutoSlot)
+void UInventoryComponent::Initialize()
+{
+	SlottedItems.Add(UItemAssetManager::WeaponItemType, nullptr);
+	SlottedItems.Add(UItemAssetManager::PotionItemType, nullptr);
+
+	for (const TPair<UItemData*, FItemDataStruct> Item : DefaultInventory)
+	{
+		AddInventoryItem(Item.Key, Item.Value.ItemCount);
+	}
+
+	for (const TPair<FItemSlot, UItemData*> Slot : DefaultSlottedItems)
+	{
+		if (InventoryData.Contains(Slot.Value))
+		{
+			SetSlottedItem(Slot.Key, Slot.Value);	
+		}
+	}
+}
+
+bool UInventoryComponent::AddInventoryItem(UItemData* NewItem, int32 ItemCount)
 {
 	if (!NewItem)
 	{
@@ -56,8 +86,11 @@ bool UInventoryComponent::AddInventoryItem(UItemData* NewItem, int32 ItemCount, 
 	if (OldData != NewData)
 	{
 		InventoryData.Add(NewItem, NewData);
-		NotifyInventoryItemChanged(true, NewItem);
 		bChanged = true;
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow,
+		                                 FString::Printf(
+			                                 TEXT("Add %s to inventory. Inventory size == %d"),
+			                                 *NewItem->ItemName.ToString(), InventoryData.Num()));
 	}
 	return bChanged;
 }
@@ -91,6 +124,7 @@ bool UInventoryComponent::RemoveInventoryItem(UItemData* RemovedItem, int32 Remo
 	else
 	{
 		InventoryData.Remove(RemovedItem);
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("REMOVED ITEM FROM INVENTORY"));
 		for (TPair<FItemSlot, UItemData*> Slot : SlottedItems)
 		{
 			if (Slot.Value == RemovedItem)
@@ -100,7 +134,6 @@ bool UInventoryComponent::RemoveInventoryItem(UItemData* RemovedItem, int32 Remo
 			}
 		}
 	}
-	NotifyInventoryItemChanged(false, RemovedItem);
 	return true;
 }
 
@@ -130,7 +163,7 @@ int32 UInventoryComponent::GetInventoryItemCount(UItemData* Item)
 	return 0;
 }
 
-bool UInventoryComponent::GetInventoryItemData(UItemData* Item, FItemDataStruct ItemData) const
+bool UInventoryComponent::GetInventoryItemData(UItemData* Item, FItemDataStruct& ItemData) const
 {
 	if (const FItemDataStruct* FoundItem = InventoryData.Find(Item))
 	{
@@ -170,22 +203,6 @@ UItemData* UInventoryComponent::GetSlottedItem(FItemSlot Slot)
 	return nullptr;
 }
 
-void UInventoryComponent::GetSlottedItems(TArray<UItemData*>& Items, FPrimaryAssetType Type, bool bOutputEmptyIndexes)
-{
-	for (TPair<FItemSlot, UItemData*>& Pair : SlottedItems)
-	{
-		if (Pair.Key.ItemType == Type || !Type.IsValid())
-		{
-			Items.Add(Pair.Value);
-		}
-	}
-}
-
-void UInventoryComponent::FillEmptySlots()
-{
-	
-}
-
 const TMap<UItemData*, FItemDataStruct>& UInventoryComponent::GetInventoryDataMap() const
 {
 	return InventoryData;
@@ -196,18 +213,14 @@ const TMap<FItemSlot, UItemData*>& UInventoryComponent::GetSlottedItemMap() cons
 	return SlottedItems;
 }
 
-void UInventoryComponent::NotifyInventoryItemChanged(bool bAdded, UItemData* Item)
-{
-	OnInventoryItemChanged.Broadcast(bAdded, Item);
-	OnInventoryItemChangedNative.Broadcast(bAdded, Item);
-
-	InventoryItemChanged(bAdded, Item);
-}
-
 void UInventoryComponent::NotifySlottedItemChanged(FItemSlot Slot, UItemData* Item)
 {
 	OnSlottedItemChanged.Broadcast(Slot, Item);
-	OnSlottedItemChangedNative.Broadcast(Slot, Item);
-
+	/*OnSlottedItemChangedNative.Broadcast(Slot, Item);*/
 	SlottedItemChanged(Slot, Item);
+	if (Owner)
+	{
+		Owner->RemoveSlottedGameplayAbilities(Slot);
+		Owner->AddSlottedGameplayAbilities();
+	}
 }

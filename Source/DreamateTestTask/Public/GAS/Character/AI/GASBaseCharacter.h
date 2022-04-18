@@ -12,10 +12,11 @@ class UInventoryComponent;
 #include "Enum/EWeaponType.h"
 #include "GameFramework/Character.h"
 #include "GAS/AttributeSet/BaseAttributeSet.h"
-#include "Inventory/InventoryComponent.h"
 #include "Inventory/InventoryTypes.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "GASBaseCharacter.generated.h"
+
+class UInventoryComponent;
 
 UCLASS()
 class DREAMATETESTTASK_API AGASBaseCharacter : public ACharacter, public IAbilitySystemInterface
@@ -57,9 +58,6 @@ protected:
 	void InitializeDefaultAttributesAndEffects();
 
 	TMap<FItemSlot, FGameplayAbilitySpecHandle> SlottedAbilities;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
-	TMap<FItemSlot, TSubclassOf<UGameplayAbility>> DefaultSlottedAbilities;
 	
 public:
 	

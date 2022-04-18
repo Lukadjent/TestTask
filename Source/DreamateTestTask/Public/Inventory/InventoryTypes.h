@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Item/ItemAssetManager.h"
 #include "Item/ItemData.h"
 #include "InventoryTypes.generated.h"
 
@@ -12,17 +13,15 @@ struct DREAMATETESTTASK_API FItemSlot
 	GENERATED_BODY();
 
 	FItemSlot()
-		: SlotNumber(-1)
+		:ItemType(UItemAssetManager::None)
 	{}
 	
-	FItemSlot(const FPrimaryAssetType& InItemType, int32 InSlotNumber)
+	FItemSlot(const FPrimaryAssetType& InItemType)
 		: ItemType(InItemType)
-		, SlotNumber(InSlotNumber)
 	{}
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")	
 	FPrimaryAssetType ItemType;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-	int32 SlotNumber;
 
 	FPrimaryAssetType GetItemType()
 	{
@@ -31,7 +30,7 @@ struct DREAMATETESTTASK_API FItemSlot
 	
 	bool operator==(const FItemSlot& Other) const 
 	{
-		return ItemType == Other.ItemType && SlotNumber == Other.SlotNumber;
+		return ItemType == Other.ItemType;
 	}
 
 	bool operator !=(const FItemSlot& Other) const
@@ -41,14 +40,13 @@ struct DREAMATETESTTASK_API FItemSlot
 
 	bool IsValid() const
 	{
-		return ItemType.IsValid() && SlotNumber >= 0;
+		return ItemType.IsValid();
 	}
 
 	friend inline uint32 GetTypeHash(const FItemSlot& Key)
 	{
 		uint32 Hash = 0;
 		Hash = HashCombine(Hash, GetTypeHash(Key.ItemType));
-		Hash = HashCombine(Hash, static_cast<uint32>(Key.SlotNumber));
 		return Hash;
 	}
 };

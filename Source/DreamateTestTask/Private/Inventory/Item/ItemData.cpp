@@ -4,7 +4,7 @@
 
 bool UItemData::IsConsumable() const
 {
-	return MaxCount <= 0 ? true : false;
+	return MaxCount <= 1 ? false : true;
 }
 
 FString UItemData::GetIdentifierString() const

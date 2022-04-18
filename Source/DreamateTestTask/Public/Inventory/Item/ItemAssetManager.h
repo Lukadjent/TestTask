@@ -18,5 +18,5 @@ public:
 	
 	static const FPrimaryAssetType WeaponItemType;
 	static const FPrimaryAssetType PotionItemType;
-	
+	static const FPrimaryAssetType None;
 };

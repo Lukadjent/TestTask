@@ -80,6 +80,12 @@ void AGASMainCharacter::CastSpell()
 	AbilitySystemComponent->TryActivateAbilityByClass(StandardAbilities[EAbilities::CastSpell]);
 }
 
+bool AGASMainCharacter::UseConsumable()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("USING CONSUMABLE"));
+	return ActivateAbilitiesWithItemSlot(UItemAssetManager::PotionItemType);
+}
+
 void AGASMainCharacter::HealthChanged(const FOnAttributeChangeData& Data)
 {
 	
