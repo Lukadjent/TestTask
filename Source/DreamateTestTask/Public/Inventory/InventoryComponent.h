@@ -58,9 +58,6 @@ protected:
 	void Initialize();
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	bool AddInventoryItem(UItemData* NewItem, int32 ItemCount = 1);
-
-	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool RemoveInventoryItem(UItemData* RemovedItem, int32 RemoveCount = 1);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
@@ -84,7 +81,9 @@ protected:
 	AGASBaseCharacter* Owner = nullptr;
 
 public:	
-
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool AddInventoryItem(UItemData* NewItem, int32 ItemCount = 1);
+	
 	UFUNCTION(BlueprintCallable)
 	const TMap<UItemData*, FItemDataStruct>& GetInventoryDataMap() const;
 

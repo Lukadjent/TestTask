@@ -1,8 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BehaviorTree/Task/BTTaskAttack.h"
-#include "Enum/EAbilities.h"
-#include "GAS/Character/AI/EnemyController.h"
+#include "GAS/Character/AI/GASAIController.h"
 #include "GAS/Character/AI/GASBaseEnemy.h"
 
 UBTTaskAttack::UBTTaskAttack()
@@ -12,14 +11,11 @@ UBTTaskAttack::UBTTaskAttack()
 
 EBTNodeResult::Type UBTTaskAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	if (const AEnemyController* AIController = Cast<AEnemyController>(OwnerComp.GetOwner()))
+	if (AGASBaseEnemy* Pawn = Cast<AGASBaseEnemy>(Cast<AGASAIController>(OwnerComp.GetOwner())->GetPawn()))
 	{
-		if (AGASBaseEnemy* Pawn = Cast<AGASBaseEnemy>(AIController->GetPawn()))
+		if (Pawn->Attack())
 		{
-			if (Pawn->Attack())
-			{
-				return EBTNodeResult::Succeeded;
-			}
+			return EBTNodeResult::Succeeded;
 		}
 	}
 	return EBTNodeResult::Failed;

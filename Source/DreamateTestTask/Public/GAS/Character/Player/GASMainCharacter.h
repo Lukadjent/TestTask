@@ -42,7 +42,7 @@ public:
 	void CastSpell();
 
 	bool UseConsumable();
-
+	
 	FDelegateHandle HealthChangedDelegateHandle;
 	FDelegateHandle MaxHealthChangedDelegateHandle;
 	FDelegateHandle HealthRegenRateChangedDelegateHandle;

@@ -20,5 +20,5 @@ class DREAMATETESTTASK_API UMMC_BaseActionCost : public UGameplayModMagnitudeCal
 
 	FGameplayEffectAttributeCaptureDefinition Stamina;
 
-	const float BaseActionStaminaCost = 40.f;
+	const float BaseActionStaminaCost = 20.f;
 };

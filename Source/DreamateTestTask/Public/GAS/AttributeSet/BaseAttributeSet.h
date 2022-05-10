@@ -51,10 +51,14 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Damage")
 	FGameplayAttributeData IncomingDamage;
 	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, IncomingDamage)
-	
-	FString TakeDamageTag = "Status.TookDamage";
 
-	FString DeathTag = "Status.Died";
+	UPROPERTY(BlueprintReadOnly, Category = "MoveSpeed")
+	FGameplayAttributeData MoveSpeed;
+	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, MoveSpeed)
+	
+	FString TakeDamageTag = "Status.Damaged";
+
+	FString DeathTag = "Status.Dead";
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 

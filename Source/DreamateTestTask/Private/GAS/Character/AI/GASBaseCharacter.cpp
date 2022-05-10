@@ -4,12 +4,20 @@
 #include "GAS/Character/AI/GASBaseCharacter.h"
 #include "Inventory/InventoryComponent.h"
 #include "DreamateTestTask/Public/Inventory/Weapon/Weapon.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
+void AGASBaseCharacter::NotifyDeath()
+{
+	if (AbilitySystemComponent->IsRegistered())
+	{
+		AbilitySystemComponent->ClearAllAbilities();
+	} 
+	CharacterDeath.Broadcast(this);
+}
 
 // Sets default values
 AGASBaseCharacter::AGASBaseCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AttributeSet = CreateDefaultSubobject<UBaseAttributeSet>(TEXT("AttributeSet"));
 	StimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(
@@ -24,6 +32,11 @@ UAbilitySystemComponent* AGASBaseCharacter::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+UChildActorComponent* AGASBaseCharacter::GetWeaponComponent() const
+{
+	return WeaponComponent;
+}
+
 // Called when the game starts or when spawned
 void AGASBaseCharacter::BeginPlay()
 {
@@ -33,23 +46,13 @@ void AGASBaseCharacter::BeginPlay()
 	{
 		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.Value, 1,static_cast<int32>(Ability.Key)));
 	}
+
+	GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMoveSpeedAttribute()).AddUObject(this, &AGASBaseCharacter::OnMovementSpeedChange);
 	
 }
 
 void AGASBaseCharacter::InitializeDefaultAttributesAndEffects()
 {
-	if (DefaultAttributes)
-	{
-		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
-		EffectContext.AddSourceObject(this);
-
-		FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributes, 0.f, EffectContext);
-		if (NewHandle.IsValid())
-		{
-			FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*NewHandle.Data.Get());
-		}
-	}
-
 	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
 	EffectContext.AddSourceObject(this);
 	
@@ -112,15 +115,17 @@ void AGASBaseCharacter::FillSlottedAbilitySpecs(TMap<FItemSlot, FGameplayAbility
 	}
 }
 
-
-// Called every frame
-void AGASBaseCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 bool AGASBaseCharacter::Attack()
 {
 	return ActivateAbilitiesWithItemSlot(Inventory->EquippedWeapon);
+}
+
+UInventoryComponent* AGASBaseCharacter::GetInventoryComponent() const
+{
+	return Inventory;
+}
+
+void AGASBaseCharacter::OnMovementSpeedChange(const FOnAttributeChangeData& Data)
+{
+	GetCharacterMovement()->MaxWalkSpeed = AttributeSet->GetMoveSpeed();
 }

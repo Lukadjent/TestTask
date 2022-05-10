@@ -1,0 +1,7 @@
+Begin Object Class=/Script/Engine.CurveTable Name="StartingStats"
+   Begin Object Class=/Script/Engine.AssetImportData Name="AssetImportData"
+   End Object
+   Begin Object Name="AssetImportData"
+   End Object
+   AssetImportData=AssetImportData'"AssetImportData"'
+End Object

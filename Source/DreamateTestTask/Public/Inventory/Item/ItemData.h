@@ -11,7 +11,7 @@ UCLASS()
 class DREAMATETESTTASK_API UItemData : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
-
+	
 public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item")

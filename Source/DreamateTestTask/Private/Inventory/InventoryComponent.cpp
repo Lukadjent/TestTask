@@ -3,7 +3,6 @@
 #include "Inventory/InventoryComponent.h"
 
 #include "GAS/Character/AI/GASBaseCharacter.h"
-#include "GAS/Character/AI/GASBaseCharacter.h"
 #include "Inventory/Item/ItemAssetManager.h"
 #include "Inventory/Item/WeaponItemData.h"
 
@@ -19,10 +18,6 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if(Owner)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, FString::Printf(TEXT("%d ---- %s"), InventoryData.Num(), *Owner->GetName()));		
-	}
 }
 
 
@@ -31,20 +26,28 @@ void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	Owner = Cast<AGASBaseCharacter>(GetOwner());
+	OnSlottedItemChanged.AddDynamic(this, &UInventoryComponent::SlottedItemChanged);
 	Initialize();
+	
 }
 
 void UInventoryComponent::SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item)
 {
-	if (Owner && ItemSlot.GetItemType() == UItemAssetManager::WeaponItemType)
+	if (Owner)
 	{
-		if (const UWeaponItemData* WeaponData = Cast<UWeaponItemData>(Item))
+		if (ItemSlot.GetItemType() == UItemAssetManager::WeaponItemType)
 		{
-			Owner->WeaponComponent->SetChildActorClass(WeaponData->GetWeaponClass());
-			EquippedWeapon = ItemSlot;
+			if (const UWeaponItemData* WeaponData = Cast<UWeaponItemData>(Item))
+			{
+				Owner->GetWeaponComponent()->SetChildActorClass(WeaponData->GetWeaponClass());
+				EquippedWeapon = ItemSlot;
+			}
 		}
+		Owner->RemoveSlottedGameplayAbilities(ItemSlot);
+		Owner->AddSlottedGameplayAbilities();	
 	}
 }
+
 
 void UInventoryComponent::Initialize()
 {
@@ -87,10 +90,7 @@ bool UInventoryComponent::AddInventoryItem(UItemData* NewItem, int32 ItemCount)
 	{
 		InventoryData.Add(NewItem, NewData);
 		bChanged = true;
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow,
-		                                 FString::Printf(
-			                                 TEXT("Add %s to inventory. Inventory size == %d"),
-			                                 *NewItem->ItemName.ToString(), InventoryData.Num()));
+		OnInventoryItemChanged.Broadcast(bChanged, NewItem);
 	}
 	return bChanged;
 }
@@ -124,8 +124,7 @@ bool UInventoryComponent::RemoveInventoryItem(UItemData* RemovedItem, int32 Remo
 	else
 	{
 		InventoryData.Remove(RemovedItem);
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("REMOVED ITEM FROM INVENTORY"));
-		for (TPair<FItemSlot, UItemData*> Slot : SlottedItems)
+		for (TPair<FItemSlot, UItemData*>& Slot : SlottedItems)
 		{
 			if (Slot.Value == RemovedItem)
 			{
@@ -134,6 +133,7 @@ bool UInventoryComponent::RemoveInventoryItem(UItemData* RemovedItem, int32 Remo
 			}
 		}
 	}
+	OnInventoryItemChanged.Broadcast(false, RemovedItem);
 	return true;
 }
 
@@ -216,11 +216,5 @@ const TMap<FItemSlot, UItemData*>& UInventoryComponent::GetSlottedItemMap() cons
 void UInventoryComponent::NotifySlottedItemChanged(FItemSlot Slot, UItemData* Item)
 {
 	OnSlottedItemChanged.Broadcast(Slot, Item);
-	/*OnSlottedItemChangedNative.Broadcast(Slot, Item);*/
-	SlottedItemChanged(Slot, Item);
-	if (Owner)
-	{
-		Owner->RemoveSlottedGameplayAbilities(Slot);
-		Owner->AddSlottedGameplayAbilities();
-	}
+	OnSlottedItemChangedNative.Broadcast(Slot, Item);
 }

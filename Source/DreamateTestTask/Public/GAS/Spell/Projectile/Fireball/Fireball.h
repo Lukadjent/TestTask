@@ -39,6 +39,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Particle")
 	UParticleSystem* Explosion;
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	USoundBase* ExplosionSound;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(ExposeOnSpawn))
 	FVector Destination;

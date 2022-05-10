@@ -49,13 +49,20 @@ void AFireball::Finished()
 void AFireball::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	//Check If Fireball Collided With Something
 	if (OtherComp->GetCollisionObjectType() == ECC_Pawn || OtherComp->GetCollisionObjectType() == ECC_WorldDynamic ||
 		OtherComp->GetCollisionObjectType() == ECC_WorldStatic)
 	{
+		//Spawn Particles And Play Sound
 		if (Explosion)
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Explosion, FTransform(GetActorLocation()));
 		}
+		if (ExplosionSound)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation());
+		}
+		
 		//Finding Actors In Explosion Area.
 		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectType;
 		ObjectType.Init(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn), 1);

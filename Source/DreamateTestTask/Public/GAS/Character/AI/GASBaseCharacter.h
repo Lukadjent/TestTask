@@ -2,8 +2,6 @@
 
 #pragma once
 
-class UInventoryComponent;
-
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
@@ -22,24 +20,20 @@ UCLASS()
 class DREAMATETESTTASK_API AGASBaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
+
+protected:
+	
+	// Sets default values for this character's properties
+	AGASBaseCharacter();
+	
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Perception")
 	UAIPerceptionStimuliSourceComponent* StimuliSourceComponent;
 	
-public:
-
-	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	UChildActorComponent* WeaponComponent;
-	
-	// Sets default values for this character's properties
-	AGASBaseCharacter();
-
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Inventory")
 	UInventoryComponent* Inventory;
@@ -59,14 +53,13 @@ protected:
 
 	TMap<FItemSlot, FGameplayAbilitySpecHandle> SlottedAbilities;
 	
-public:
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TSubclassOf<class UGameplayEffect> DefaultAttributes;
-	
 	UPROPERTY(EditDefaultsOnly)
 	TMap<EAbilities, TSubclassOf<UGameplayAbility>> StandardAbilities;
 
+	void OnMovementSpeedChange(const FOnAttributeChangeData& Data);
+
+public:	
+	
 	UFUNCTION()
 	bool ActivateAbilitiesWithItemSlot(FItemSlot ItemSlot);
 
@@ -80,11 +73,19 @@ public:
 	void FillSlottedAbilitySpecs(TMap<FItemSlot, FGameplayAbilitySpec>& SlottedAbilitySpecs);
 
 #pragma endregion 
+
+	DECLARE_MULTICAST_DELEGATE_OneParam(FCharacterDeath, AGASBaseCharacter*);
+	FCharacterDeath CharacterDeath;
 	
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UFUNCTION(BlueprintCallable)
+	void NotifyDeath();
 	
 	bool Attack();
+
+	UInventoryComponent* GetInventoryComponent() const;
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	UChildActorComponent* GetWeaponComponent() const;
 	
 };

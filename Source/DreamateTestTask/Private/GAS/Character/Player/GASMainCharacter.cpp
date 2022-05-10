@@ -5,7 +5,7 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GAS/Character/Player/MainCharacterController.h"
+#include "GAS/Character/Player/GASPlayerController.h"
 
 AGASMainCharacter::AGASMainCharacter()
 {
@@ -51,16 +51,16 @@ void AGASMainCharacter::PawnClientRestart()
 {
 	Super::PawnClientRestart();
 
-	if (const AMainCharacterController* PlayerController = Cast<AMainCharacterController>(GetController()))
+	if (const AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
 			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->ClearAllMappings();
-			Subsystem->AddMappingContext(PlayerController->ControlMappingContext,
-			                             PlayerController->ControlsMappingPriority);
-			Subsystem->AddMappingContext(PlayerController->CombatMappingContext,
-				                         PlayerController->CombatMappingPriority);
+			Subsystem->AddMappingContext(PlayerController->GetControlMappingContext(),
+			                             PlayerController->GetControlsMappingPriority());
+			Subsystem->AddMappingContext(PlayerController->GetCombatMappingContext(),
+				                         PlayerController->GetCombatMappingPriority());
 		}
 	}
 }
@@ -82,7 +82,6 @@ void AGASMainCharacter::CastSpell()
 
 bool AGASMainCharacter::UseConsumable()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("USING CONSUMABLE"));
 	return ActivateAbilitiesWithItemSlot(UItemAssetManager::PotionItemType);
 }
 
@@ -94,7 +93,7 @@ void AGASMainCharacter::HealthChanged(const FOnAttributeChangeData& Data)
 void AGASMainCharacter::MaxHealthChanged(const FOnAttributeChangeData& Data)
 {
 	float MaxHealth = Data.NewValue;
-	if (AMainCharacterController* PlayerController = Cast<AMainCharacterController>(GetController()))
+	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
 	{
 		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
 		{
@@ -106,7 +105,7 @@ void AGASMainCharacter::MaxHealthChanged(const FOnAttributeChangeData& Data)
 void AGASMainCharacter::HealthRegenRateChanged(const FOnAttributeChangeData& Data)
 {
 	float HealthRegenRate = Data.NewValue;
-	if (AMainCharacterController* PlayerController = Cast<AMainCharacterController>(GetController()))
+	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
 	{
 		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
 		{
@@ -118,7 +117,7 @@ void AGASMainCharacter::HealthRegenRateChanged(const FOnAttributeChangeData& Dat
 void AGASMainCharacter::MaxManaChanged(const FOnAttributeChangeData& Data)
 {
 	float MaxMana = Data.NewValue;
-	if (AMainCharacterController* PlayerController = Cast<AMainCharacterController>(GetController()))
+	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
 	{
 		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
 		{
@@ -130,7 +129,7 @@ void AGASMainCharacter::MaxManaChanged(const FOnAttributeChangeData& Data)
 void AGASMainCharacter::ManaRegenRateChanged(const FOnAttributeChangeData& Data)
 {
 	float ManaRegenRate = Data.NewValue;
-	if (AMainCharacterController* PlayerController = Cast<AMainCharacterController>(GetController()))
+	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
 	{
 		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
 		{
@@ -142,7 +141,7 @@ void AGASMainCharacter::ManaRegenRateChanged(const FOnAttributeChangeData& Data)
 void AGASMainCharacter::MaxStaminaChanged(const FOnAttributeChangeData& Data)
 {
 	float MaxStamina = Data.NewValue;
-	if (AMainCharacterController* PlayerController = Cast<AMainCharacterController>(GetController()))
+	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
 	{
 		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
 		{
@@ -154,7 +153,7 @@ void AGASMainCharacter::MaxStaminaChanged(const FOnAttributeChangeData& Data)
 void AGASMainCharacter::StaminaRegenRateChanged(const FOnAttributeChangeData& Data)
 {
 	float StaminaRegenRate = Data.NewValue;
-	if (AMainCharacterController* PlayerController = Cast<AMainCharacterController>(GetController()))
+	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
 	{
 		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
 		{
