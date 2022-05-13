@@ -14,13 +14,6 @@ UInventoryComponent::UInventoryComponent()
 	
 }
 
-void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-	FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-}
-
-
 // Called when the game starts
 void UInventoryComponent::BeginPlay()
 {

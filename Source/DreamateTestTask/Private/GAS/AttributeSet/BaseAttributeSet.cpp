@@ -4,31 +4,6 @@
 
 #include "DreamateTestTask/Public/GAS/Character/AI/GASBaseCharacter.h"
 
-void UBaseAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
-{
-
-	Super::PreAttributeChange(Attribute, NewValue);
-	
-	// if (AGASBaseCharacter* Char = Cast<AGASBaseCharacter>(GetOwningActor()))
-	// {
-	// 	if (Attribute == GetHealthAttribute())
-	// 	{
-	// 		NewValue = FMath::Clamp<float>(NewValue, 0, GetMaxHealth());
-	// 		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, FString::Printf(TEXT("%f"), NewValue));
-	// 		FGameplayTag Tag;
-	// 		if (NewValue <= 0)
-	// 		{
-	// 			Tag.FromExportString(DeathTag);
-	// 		}
-	// 		else
-	// 		{
-	// 			Tag.FromExportString(TakeDamageTag);
-	// 		}
-	// 		GetOwningAbilitySystemComponent()->AddLooseGameplayTag(Tag);
-	// 	}	
-	// }
-}
-
 void UBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
@@ -42,6 +17,7 @@ void UBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			const float NewHealth = GetHealth() - DealtDamage;
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 			FGameplayTag Tag;
+			//If new health > 0.f - Character took damage, otherwise he died.
 			if (GetHealth() > 0.f)
 			{
 				Tag.FromExportString(TakeDamageTag);
@@ -53,16 +29,19 @@ void UBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			GetOwningAbilitySystemComponent()->AddLooseGameplayTag(Tag);
 		}
 	}
+	
 	if (Data.EvaluatedData.Attribute == GetStaminaAttribute())
 	{
 		const float NewStamina = GetStamina();
 		SetStamina(FMath::Clamp(NewStamina, 0.f, GetMaxStamina()));
 	}
+
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		const float NewHealth = GetHealth();
 		SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 	}
+
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
 		const float NewMana = GetMana();

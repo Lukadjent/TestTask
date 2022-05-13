@@ -9,19 +9,17 @@
 #include "Kismet/GameplayStatics.h"
 #include "MaterialEditor/Public/MaterialStatsCommon.h"
 
-// Sets default values
+// Create components
 AWeapon::AWeapon()
 {
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
 	RootComponent = StaticMeshComponent;
 	BoxCollisionComponent = CreateDefaultSubobject<UBoxComponent>("BoxComponent");
-	BoxCollisionComponent->SetRelativeTransform(BoxCollisionTransform);
 	BoxCollisionComponent->SetupAttachment(StaticMeshComponent);
 	BoxCollisionComponent->SetGenerateOverlapEvents(false);
 	BoxCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::OnOverlapBegin);
 }
 
-// Called when the game starts or when spawned
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
@@ -50,11 +48,6 @@ void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 
 void AWeapon::SendAttackEvent(AActor* Target)
 {
-	if (Target->GetRootComponent()->GetCollisionObjectType() == ECC_WorldStatic)
-	{
-		OwningPawn->GetAbilitySystemComponent()->CancelAbilities();
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, Target->GetActorLocation());
-	}
 	Target = Cast<AGASBaseCharacter>(Target);
 	if (Target && Target != OwningPawn)
 	{

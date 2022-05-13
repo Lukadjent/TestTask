@@ -22,32 +22,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	FTimerHandle ClearAttackCounterTimerHandle;
-
-	void ClearAttackCounter();
-
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UStaticMeshComponent* StaticMeshComponent;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UBoxComponent* BoxCollisionComponent;
 
-	UPROPERTY(EditDefaultsOnly)
-	FTransform BoxCollisionTransform;
-
+#pragma region WEAPON_DATA
+	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapon")
 	UWeaponItemData* ItemData;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapon")
-	FItemSlot Slot;
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Sound")
-	USoundBase* HitSound;
-	
-	UPROPERTY(BlueprintReadOnly)
-	int AttackCounter = 0;
-
-	FName HitTag = "Weapon.Hit";
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float Damage;
@@ -66,7 +50,15 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Moveset")
 	float ComboTime = 2.f;
-	
+
+	UPROPERTY(BlueprintReadOnly)
+	int AttackCounter = 0;
+
+	FName HitTag = "Weapon.Hit";
+
+	FTimerHandle ClearAttackCounterTimerHandle;
+
+	void ClearAttackCounter();
 	
 	UFUNCTION()
 	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -74,7 +66,10 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void SendAttackEvent(AActor* Target);
 
+#pragma endregion 
+
 public:
+	
 	UBoxComponent* GetBoxCollision() const;
 
 };

@@ -132,12 +132,14 @@ int32 AGASPlayerController::GetCombatMappingPriority() const
 	return CombatMappingPriority;
 }
 
+void AGASPlayerController::SetCanMove(bool bNewValue)
+{
+	bCanMove = bNewValue;
+}
+
 void AGASPlayerController::CharacterMovement()
 {
-	FGameplayTagContainer TagContainer;
-	PlayerCharacter->GetAbilitySystemComponent()->GetOwnedGameplayTags(TagContainer);
-
-	if (!TagContainer.HasTag(FGameplayTag::RequestGameplayTag("Status.Immobile")))
+	if (bCanMove)
 	{
 		//Finding A Point For Character To Go
 		FHitResult Result;

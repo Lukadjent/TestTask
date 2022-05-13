@@ -30,7 +30,7 @@ class DREAMATETESTTASK_API AGASPlayerController : public APlayerController, publ
 
 protected:
 
-#pragma region CHARACTERCAMERA
+#pragma region CHARACTER_CAMERA
 
 	UPROPERTY()
 	UCameraComponent* CharacterCameraComponent;
@@ -126,6 +126,8 @@ protected:
 	virtual FGenericTeamId GetGenericTeamId() const override;
 
 #pragma endregion
+
+	bool bCanMove = true;
 	
 public:
 	
@@ -133,6 +135,7 @@ public:
 	int32 GetControlsMappingPriority() const;
 	UInputMappingContext* GetCombatMappingContext() const;
 	int32 GetCombatMappingPriority() const;
+	void SetCanMove(bool bNewValue);
 	
 };
 

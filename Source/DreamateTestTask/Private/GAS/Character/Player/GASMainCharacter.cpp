@@ -22,8 +22,6 @@ AGASMainCharacter::AGASMainCharacter()
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
-
-	
 	
 }
 
@@ -33,15 +31,9 @@ void AGASMainCharacter::BeginPlay()
 	
 	if (AbilitySystemComponent)
 	{
-		HealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &AGASMainCharacter::HealthChanged);
 		MaxHealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxHealthAttribute()).AddUObject(this, &AGASMainCharacter::MaxHealthChanged);
-		//HealthRegenRateChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthRegenRateAttribute()).AddUObject(this, &AGASMainCharacter::HealthRegenRateChanged);
-		//ManaChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetManaAttribute()).AddUObject(this, &AGASMainCharacter::ManaChanged);
 		MaxManaChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxManaAttribute()).AddUObject(this, &AGASMainCharacter::MaxManaChanged);
-		//ManaRegenRateChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetManaRegenRateAttribute()).AddUObject(this, &AGASMainCharacter::ManaRegenRateChanged);
-		//StaminaChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetStaminaAttribute()).AddUObject(this, &AGASMainCharacter::StaminaChanged);
 		MaxStaminaChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxStaminaAttribute()).AddUObject(this, &AGASMainCharacter::MaxStaminaChanged);
-		//StaminaRegenRateChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetStaminaRegenRateAttribute()).AddUObject(this, &AGASMainCharacter::StaminaRegenRateChanged);
 	}
 	
 	InitializeDefaultAttributesAndEffects();
@@ -61,6 +53,19 @@ void AGASMainCharacter::PawnClientRestart()
 			                             PlayerController->GetControlsMappingPriority());
 			Subsystem->AddMappingContext(PlayerController->GetCombatMappingContext(),
 				                         PlayerController->GetCombatMappingPriority());
+		}
+	}
+}
+
+void AGASMainCharacter::ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
+	{
+		const bool bCanMove = NewCount > 0 ? false : true;
+		PlayerController->SetCanMove(bCanMove);
+		if (!bCanMove)
+		{
+			GetMovementComponent()->StopMovementImmediately();
 		}
 	}
 }
@@ -85,11 +90,6 @@ bool AGASMainCharacter::UseConsumable()
 	return ActivateAbilitiesWithItemSlot(UItemAssetManager::PotionItemType);
 }
 
-void AGASMainCharacter::HealthChanged(const FOnAttributeChangeData& Data)
-{
-	
-}
-
 void AGASMainCharacter::MaxHealthChanged(const FOnAttributeChangeData& Data)
 {
 	float MaxHealth = Data.NewValue;
@@ -98,18 +98,6 @@ void AGASMainCharacter::MaxHealthChanged(const FOnAttributeChangeData& Data)
 		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
 		{
 			HUD->MainHUDWidget->SetMaxHealth(MaxHealth);
-		}
-	}
-}
-
-void AGASMainCharacter::HealthRegenRateChanged(const FOnAttributeChangeData& Data)
-{
-	float HealthRegenRate = Data.NewValue;
-	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
-	{
-		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
-		{
-			HUD->MainHUDWidget->SetHealthRegenRate(HealthRegenRate);
 		}
 	}
 }
@@ -124,18 +112,6 @@ void AGASMainCharacter::MaxManaChanged(const FOnAttributeChangeData& Data)
 			HUD->MainHUDWidget->SetMaxMana(MaxMana);
 		}
 	}	
-}
-
-void AGASMainCharacter::ManaRegenRateChanged(const FOnAttributeChangeData& Data)
-{
-	float ManaRegenRate = Data.NewValue;
-	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
-	{
-		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
-		{
-			HUD->MainHUDWidget->SetManaRegenRate(ManaRegenRate);
-		}
-	}
 }
 
 void AGASMainCharacter::MaxStaminaChanged(const FOnAttributeChangeData& Data)
@@ -191,5 +167,3 @@ float AGASMainCharacter::GetMaxStamina() const
 {
 	return AttributeSet->GetMaxStamina();
 }
-
-

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "InteractableBase.h"
-#include "Components/WidgetComponent.h"
 #include "Inventory/Item/ItemData.h"
 #include "PickUpBase.generated.h"
 

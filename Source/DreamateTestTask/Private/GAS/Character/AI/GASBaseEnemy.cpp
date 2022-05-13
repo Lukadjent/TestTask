@@ -2,9 +2,11 @@
 
 #include "GAS/Character/AI/GASBaseEnemy.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "UI/FloatingBarWidget.h"
 
+//Create widget component and set the variables of it
 AGASBaseEnemy::AGASBaseEnemy()
 {
 	
@@ -19,7 +21,8 @@ AGASBaseEnemy::AGASBaseEnemy()
 void AGASBaseEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	//Bind function on health attribute changed
 	HealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &AGASBaseEnemy::HealthChanged);
 	
 	InitializeDefaultAttributesAndEffects();
@@ -45,6 +48,19 @@ void AGASBaseEnemy::HealthChanged(const FOnAttributeChangeData& Data)
 	if (FloatingBarWidget)
 	{
 		FloatingBarWidget->SetCurrentHealth(Health);
+	}
+}
+
+void AGASBaseEnemy::ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	if (NewCount > 0)
+	{
+		GetCharacterMovement()->SetMovementMode(MOVE_None);
+		GetController()->StopMovement();
+	}
+	else
+	{
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	}
 }
 

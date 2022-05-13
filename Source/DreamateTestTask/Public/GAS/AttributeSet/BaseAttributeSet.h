@@ -20,7 +20,7 @@ class DREAMATETESTTASK_API UBaseAttributeSet : public UAttributeSet
 	GENERATED_BODY()
 public:
 	
-	UPROPERTY(BlueprintReadOnly, Category = "MaxHealth")
+	UPROPERTY(BlueprintReadOnly, Category = "Health")
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, MaxHealth)
 
@@ -28,7 +28,7 @@ public:
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, Health)
 
-	UPROPERTY(BlueprintReadOnly, Category = "MaxMana")
+	UPROPERTY(BlueprintReadOnly, Category = "Mana")
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, MaxMana)
 	
@@ -36,7 +36,7 @@ public:
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, Mana)
 
-	UPROPERTY(BlueprintReadOnly, Category = "MaxStamina")
+	UPROPERTY(BlueprintReadOnly, Category = "Stamina")
 	FGameplayAttributeData MaxStamina;
 	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, MaxStamina)
 	
@@ -48,7 +48,7 @@ public:
 	FGameplayAttributeData StaminaRegenerationRate;
 	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, StaminaRegenerationRate)
 
-	UPROPERTY(BlueprintReadOnly, Category = "Damage")
+	UPROPERTY(BlueprintReadOnly, Category = "IncomingDamage")
 	FGameplayAttributeData IncomingDamage;
 	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, IncomingDamage)
 
@@ -59,8 +59,6 @@ public:
 	FString TakeDamageTag = "Status.Damaged";
 
 	FString DeathTag = "Status.Dead";
-
-	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 };

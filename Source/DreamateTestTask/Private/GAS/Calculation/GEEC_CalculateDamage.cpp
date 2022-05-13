@@ -33,10 +33,6 @@ void UGEEC_CalculateDamage::Execute_Implementation(const FGameplayEffectCustomEx
 {
 	Super::Execute_Implementation(ExecutionParams, OutExecutionOutput);
 	
-
-	UAbilitySystemComponent* TargetAbilitySystemComponent = ExecutionParams.GetTargetAbilitySystemComponent();
-	UAbilitySystemComponent* SourceAbilitySystemComponent = ExecutionParams.GetSourceAbilitySystemComponent();
-
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
 
 	// Gather the tags from the source and target as that can affect which buffs should be used

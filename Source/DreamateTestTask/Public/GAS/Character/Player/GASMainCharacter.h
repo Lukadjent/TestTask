@@ -22,6 +22,8 @@ class DREAMATETESTTASK_API AGASMainCharacter : public AGASBaseCharacter
 	
 	virtual void PawnClientRestart() override;
 
+	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
+
 public: 
 #pragma region CAMERA
 
@@ -35,6 +37,8 @@ public:
 	
 #pragma endregion
 
+#pragma region ABILITIES
+	
 	void Roll();
 
 	void Parry();
@@ -42,24 +46,16 @@ public:
 	void CastSpell();
 
 	bool UseConsumable();
+
+#pragma endregion
 	
-	FDelegateHandle HealthChangedDelegateHandle;
 	FDelegateHandle MaxHealthChangedDelegateHandle;
-	FDelegateHandle HealthRegenRateChangedDelegateHandle;
-	FDelegateHandle ManaChangedDelegateHandle;
 	FDelegateHandle MaxManaChangedDelegateHandle;
-	FDelegateHandle ManaRegenRateChangedDelegateHandle;
-	FDelegateHandle StaminaChangedDelegateHandle;
 	FDelegateHandle MaxStaminaChangedDelegateHandle;
 	FDelegateHandle StaminaRegenRateChangedDelegateHandle;
-
-	virtual void HealthChanged(const FOnAttributeChangeData& Data);
+	
 	virtual void MaxHealthChanged(const FOnAttributeChangeData& Data);
-	virtual void HealthRegenRateChanged(const FOnAttributeChangeData& Data);
-	//virtual void ManaChanged(const FOnAttributeChangeData& Data);
 	virtual void MaxManaChanged(const FOnAttributeChangeData& Data);
-	virtual void ManaRegenRateChanged(const FOnAttributeChangeData& Data);
-	//virtual void StaminaChanged(const FOnAttributeChangeData& Data);
 	virtual void MaxStaminaChanged(const FOnAttributeChangeData& Data);
 	virtual void StaminaRegenRateChanged(const FOnAttributeChangeData& Data);
 
@@ -69,24 +65,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
 	float GetMaxHealth() const;
 
-	/*UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
-	float GetHealthRegenRate() const;*/
-
 	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
 	float GetMana() const;
 
 	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
 	float GetMaxMana() const;
 
-	/*UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
-	float GetManaRegenRate() const;*/
-
 	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
 	float GetStamina() const;
 
 	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
 	float GetMaxStamina() const;
-
-	/*UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
-	float GetStaminaRegenRate() const;*/
+	
 };

@@ -48,8 +48,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Drop")
 	float DropProbability;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI | Patroling")
+	//Patrol points where character will go
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI | Patroling")
 	TArray<ATargetPoint*> PatrolPoints;
+
+	//Override of function that reacts on Immobile tag added/removed
+	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
 	
 public:
 

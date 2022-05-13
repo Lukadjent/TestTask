@@ -8,7 +8,6 @@
 
 void ADreamateTestTaskGameModeBase::BeginPlay()
 {
-	//Super::BeginPlay();
 	PlayerCharacter = Cast<AGASMainCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (PlayerCharacter)
 	{
@@ -32,6 +31,7 @@ void ADreamateTestTaskGameModeBase::OnEnemyDeath(AGASBaseCharacter* Enemy)
 	if (AGASBaseEnemy* Test = Cast<AGASBaseEnemy>(Enemy))
 	{
 		Test->SpawnLoot();
+		Test->Destroy();
 	}
 	if (Enemies.IsEmpty())
 	{
@@ -41,7 +41,6 @@ void ADreamateTestTaskGameModeBase::OnEnemyDeath(AGASBaseCharacter* Enemy)
 
 void ADreamateTestTaskGameModeBase::OnPlayerCharacterDeath(AGASBaseCharacter* Character)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, TEXT("Lose"));
 	PlayAgainWidget = CreateWidget<UPlayAgainWidget>(GetWorld(), WidgetClass);
 	if (PlayAgainWidget)
 	{
@@ -55,7 +54,6 @@ void ADreamateTestTaskGameModeBase::Victory()
 	PlayAgainWidget = CreateWidget<UPlayAgainWidget>(GetWorld(), WidgetClass);
 	if (PlayAgainWidget)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, TEXT("Victory"));
 		PlayAgainWidget->SetText("You Won");
 		PlayAgainWidget->AddToViewport();
 	}
