@@ -43,9 +43,6 @@ protected:
 	AGASBaseCharacter* OwningPawn;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Moveset")
-	UAnimMontage* Montage;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Moveset")
 	int32 AttacksInCombo = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Moveset")
