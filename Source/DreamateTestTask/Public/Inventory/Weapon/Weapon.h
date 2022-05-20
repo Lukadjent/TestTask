@@ -60,9 +60,6 @@ protected:
 	UFUNCTION()
 	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UFUNCTION(BlueprintCallable)
-	void SendAttackEvent(AActor* Target);
-
 #pragma endregion 
 
 public:

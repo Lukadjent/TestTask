@@ -43,19 +43,14 @@ void AWeapon::OnAttack()
 void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {;
-	SendAttackEvent(OtherActor);
-}
-
-void AWeapon::SendAttackEvent(AActor* Target)
-{
-	Target = Cast<AGASBaseCharacter>(Target);
-	if (Target && Target != OwningPawn)
+	OtherActor = Cast<AGASBaseCharacter>(OtherActor);
+	if (OtherActor && OtherActor != OwningPawn)
 	{
 		FGameplayTag Hit = FGameplayTag::RequestGameplayTag(HitTag);
 		FGameplayEventData Data;
 		Data.Instigator = OwningPawn;
-		Data.Target = Target;
-		Data.TargetData = UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor(Target);
+		Data.Target = OtherActor;
+		Data.TargetData = UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor(OtherActor);
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwningPawn, Hit, Data);
 	}
 }
