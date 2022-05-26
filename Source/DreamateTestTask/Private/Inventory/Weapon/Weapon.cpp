@@ -42,21 +42,33 @@ void AWeapon::OnAttack()
 
 void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{;
-	OtherActor = Cast<AGASBaseCharacter>(OtherActor);
-	if (OtherActor && OtherActor != OwningPawn)
+{
+	AGASBaseCharacter* HitActor = Cast<AGASBaseCharacter>(OtherActor);
+	if (HitActor && HitActor != OwningPawn)
 	{
-		FGameplayTag Hit = FGameplayTag::RequestGameplayTag(HitTag);
-		FGameplayEventData Data;
-		Data.Instigator = OwningPawn;
-		Data.Target = OtherActor;
-		Data.TargetData = UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor(OtherActor);
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwningPawn, Hit, Data);
+		if (!HitActors.Contains(HitActor))
+		{
+			FGameplayEventData Data;
+			Data.Instigator = OwningPawn;
+			Data.Target = OtherActor;
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwningPawn, Hit, Data);
+			HitActors.Add(HitActor);
+		}
 	}
 }
 
 UBoxComponent* AWeapon::GetBoxCollision() const
 {
 	return BoxCollisionComponent;
+}
+
+void AWeapon::SetHitTag(FGameplayTag HitTag)
+{
+	Hit = HitTag;
+}
+
+void AWeapon::ClearHitTargets()
+{
+	HitActors.Empty();
 }
 

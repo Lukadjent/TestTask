@@ -64,12 +64,14 @@ void AGASPlayerController::SetupInputComponent()
 
 		if (IA_AttachCamera)
 		{
-			EnhancedInputComponent->BindAction(IA_AttachCamera, ETriggerEvent::Started, this,
+			EnhancedInputComponent->BindAction(IA_AttachCamera, ETriggerEvent::Triggered, this,
 											   &AGASPlayerController::AttachCamera);
 		}
 
 		if (IA_RotateCamera) 
 		{
+			EnhancedInputComponent->BindAction(IA_RotateCamera, ETriggerEvent::Started, this,
+												   &AGASPlayerController::AttachCamera);
 			EnhancedInputComponent->BindAction(IA_RotateCamera, ETriggerEvent::Triggered, this,
 											   &AGASPlayerController::RotateCamera);
 		}

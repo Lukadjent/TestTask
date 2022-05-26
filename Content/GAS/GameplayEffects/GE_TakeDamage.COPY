@@ -1,0 +1,21 @@
+Begin Object Class=/Script/Engine.Blueprint Name="GE_TakeDamage"
+   Begin Object Class=/Script/Engine.EdGraph Name="EventGraph"
+   End Object
+   Begin Object Class=/Script/UnrealEd.SceneThumbnailInfo Name="SceneThumbnailInfo_0"
+   End Object
+   Begin Object Name="EventGraph"
+      Schema=Class'"/Script/BlueprintGraph.EdGraphSchema_K2"'
+      bAllowDeletion=False
+      GraphGuid=4BAAEF69418226B5BFD458A1FE181E5E
+   End Object
+   Begin Object Name="SceneThumbnailInfo_0"
+   End Object
+   ParentClass=Class'"/Script/GameplayAbilities.GameplayEffect"'
+   BlueprintSystemVersion=2
+   UbergraphPages(0)=EdGraph'"EventGraph"'
+   LastEditedDocuments(0)=(EditedObjectPath="/Game/GAS/GameplayEffects/GE_TakeDamage.GE_TakeDamage:EventGraph",SavedViewOffset=(X=-2313.571428,Y=-1113.712963),SavedZoomAmount=0.375000)
+   ThumbnailInfo=SceneThumbnailInfo'"SceneThumbnailInfo_0"'
+   GeneratedClass=BlueprintGeneratedClass'"GE_TakeDamage_C"'
+   bLegacyNeedToPurgeSkelRefs=False
+   BlueprintGuid=8167E0D44828268AB3225AB4B60CF6AD
+End Object

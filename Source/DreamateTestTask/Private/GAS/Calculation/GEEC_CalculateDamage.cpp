@@ -44,7 +44,7 @@ void UGEEC_CalculateDamage::Execute_Implementation(const FGameplayEffectCustomEx
 	EvaluationParameters.TargetTags = TargetTags;
 
 	float Damage = 0.f;
-	Damage += FMath::Max<float>(Spec.GetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(DamageSetByCallerTag), false, -1.0f), 0.0f);
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().IncomingDamageDef, EvaluationParameters, Damage);
 	if (TargetTags->HasTag(FGameplayTag::RequestGameplayTag(StunTag)))
 	{
 		Damage *= 1.5f;

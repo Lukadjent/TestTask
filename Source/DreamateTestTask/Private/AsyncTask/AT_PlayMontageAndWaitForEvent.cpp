@@ -4,7 +4,7 @@
 #include "AsyncTask/AT_PlayMontageAndWaitForEvent.h"
 
 #include "AbilitySystemComponent.h"
-#include "AnimNotify/ANS_StunImmune.h"
+#include "AnimNotify/ANS_ApplyGameplayEffectBase.h"
 #include "GameFramework/Character.h"
 
 void UAT_PlayMontageAndWaitForEvent::Activate()
@@ -194,7 +194,6 @@ void UAT_PlayMontageAndWaitForEvent::OnGameplayEvent(FGameplayTag EventTag, cons
 	{
 		FGameplayEventData TempData = *Payload;
 		TempData.EventTag = EventTag;
-
 		EventReceived.Broadcast(EventTag, TempData);
 	}
 }

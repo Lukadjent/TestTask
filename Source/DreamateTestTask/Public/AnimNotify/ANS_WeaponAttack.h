@@ -21,5 +21,10 @@ class DREAMATETESTTASK_API UANS_WeaponAttack : public UAnimNotifyState
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
 
 	UPROPERTY()
-	AWeapon* Weapon; 
+	AWeapon* Weapon;
+
+protected:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HitTag")
+	FGameplayTag WeaponHitTag;
 };

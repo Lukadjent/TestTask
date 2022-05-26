@@ -12,6 +12,7 @@ void UANS_WeaponAttack::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSeque
 		Weapon = Cast<AWeapon>(Character->GetWeaponComponent()->GetChildActor());
 		if (Weapon)
 		{
+			Weapon->SetHitTag(WeaponHitTag);
 			Weapon->GetBoxCollision()->SetGenerateOverlapEvents(true);
 		}
 	}
@@ -21,6 +22,7 @@ void UANS_WeaponAttack::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenc
 {
 	if (Weapon)
 	{
+		Weapon->ClearHitTargets();
 		Weapon->GetBoxCollision()->SetGenerateOverlapEvents(false);
 	}
 }

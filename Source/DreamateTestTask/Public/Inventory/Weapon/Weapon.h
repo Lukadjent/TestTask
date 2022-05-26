@@ -51,7 +51,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	int AttackCounter = 0;
 
-	FName HitTag = "Weapon.Hit";
+	FGameplayTag Hit;
+
+	UPROPERTY()
+	TArray<AGASBaseCharacter*> HitActors;
 
 	FTimerHandle ClearAttackCounterTimerHandle;
 
@@ -66,4 +69,7 @@ public:
 	
 	UBoxComponent* GetBoxCollision() const;
 
+	void SetHitTag(FGameplayTag HitTag);
+
+	void ClearHitTargets();
 };
