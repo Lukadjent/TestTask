@@ -48,11 +48,11 @@ void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	{
 		if (!HitActors.Contains(HitActor))
 		{
+			HitActors.Add(HitActor);
 			FGameplayEventData Data;
 			Data.Instigator = OwningPawn;
 			Data.Target = OtherActor;
 			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwningPawn, Hit, Data);
-			HitActors.Add(HitActor);
 		}
 	}
 }

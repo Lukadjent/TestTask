@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Dummy.h"
 #include "GASBaseCharacter.h"
 #include "Components/WidgetComponent.h"
 #include "Engine/TargetPoint.h"
@@ -14,7 +15,7 @@
  * 
  */
 UCLASS()
-class DREAMATETESTTASK_API AGASBaseEnemy : public AGASBaseCharacter
+class DREAMATETESTTASK_API AGASBaseEnemy : public ADummy
 {
 	GENERATED_BODY()
 
@@ -26,7 +27,7 @@ protected:
 
 #pragma region UI
 	
-	UPROPERTY()
+	/*UPROPERTY()
 	UFloatingBarWidget* FloatingBarWidget;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "UI|Bar")
@@ -37,7 +38,7 @@ protected:
 
 	FDelegateHandle HealthChangedDelegateHandle;
 
-	void HealthChanged(const FOnAttributeChangeData& Data);
+	void HealthChanged(const FOnAttributeChangeData& Data);*/
 
 #pragma endregion
 

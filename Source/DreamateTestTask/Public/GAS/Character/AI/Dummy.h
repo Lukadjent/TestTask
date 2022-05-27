@@ -16,11 +16,11 @@ class DREAMATETESTTASK_API ADummy : public AGASBaseCharacter
 {
 	GENERATED_BODY()
 
+protected:
+	
 	ADummy();
 
 	virtual void BeginPlay() override;
-
-protected:
 	
 	UPROPERTY()
 	UFloatingBarWidget* FloatingBarWidget;

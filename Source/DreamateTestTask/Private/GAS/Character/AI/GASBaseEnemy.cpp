@@ -10,11 +10,11 @@
 AGASBaseEnemy::AGASBaseEnemy()
 {
 	
-	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>("WidgetComponent");
+	/*WidgetComponent = CreateDefaultSubobject<UWidgetComponent>("WidgetComponent");
 	WidgetComponent->SetupAttachment(RootComponent);
 	WidgetComponent->SetRelativeLocation(FVector(0.f,0.f, 120.f));
 	WidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
-	WidgetComponent->SetDrawSize(FVector2d(500, 500));
+	WidgetComponent->SetDrawSize(FVector2d(500, 500));*/
 	
 }
 
@@ -22,7 +22,7 @@ void AGASBaseEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Bind function on health attribute changed
+	/*//Bind function on health attribute changed
 	HealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &AGASBaseEnemy::HealthChanged);
 	
 	InitializeDefaultAttributesAndEffects();
@@ -38,18 +38,18 @@ void AGASBaseEnemy::BeginPlay()
 			FloatingBarWidget->SetCurrentHealth(AttributeSet->GetHealth());
 			FloatingBarWidget->SetMaxHealth(AttributeSet->GetMaxHealth());
 		}
-	}
+	}*/
 	
 }
 
-void AGASBaseEnemy::HealthChanged(const FOnAttributeChangeData& Data)
+/*void AGASBaseEnemy::HealthChanged(const FOnAttributeChangeData& Data)
 {
 	float Health = Data.NewValue;
 	if (FloatingBarWidget)
 	{
 		FloatingBarWidget->SetCurrentHealth(Health);
 	}
-}
+}*/
 
 void AGASBaseEnemy::ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
