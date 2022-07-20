@@ -12,6 +12,8 @@ ADummy::ADummy()
 	WidgetComponent->SetDrawSize(FVector2d(500, 500));
 }
 
+//печг бхдферю бме DUMMY
+
 void ADummy::BeginPlay()
 {
 	Super::BeginPlay();

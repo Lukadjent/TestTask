@@ -9,9 +9,9 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "VectorTypes.h"
+#include "Camera/MovingCameraComponent.h"
 #include "InteractableObjects/InteractableBase.h"
 #include "Kismet/KismetMathLibrary.h"
-
 
 void AGASPlayerController::BeginPlay()
 {
@@ -20,12 +20,19 @@ void AGASPlayerController::BeginPlay()
 	//Initialize MainCharacter and Components
 
 	PlayerCharacter = Cast<AGASMainCharacter>(GetPawn());
-	if (!PlayerCharacter)
+	if (PlayerCharacter)
 	{
-		UE_LOG(LogTemp, Error, TEXT("AMainCharacterController: Failed To Initialize Player Character Controller!"));
+		CameraComponent = PlayerCharacter->CameraComponent;
+		SpringArmComponent = PlayerCharacter->SpringArmComponent;
 	}
-	CharacterCameraComponent = PlayerCharacter->CameraComponent;
-	CharacterSpringArmComponent = PlayerCharacter->SpringArmComponent;
+	const ICameraInterface* Camera = Cast<ICameraInterface>(GetPawn());
+	if (Camera)
+	{
+		CameraComponent = Camera->GetMovingCameraComponent();
+		SpringArmComponent = Camera->GetRotatingSpringArmComponent();
+		return;
+	}
+	UE_LOG(LogTemp, Error, TEXT("AMainCharacterController: Failed To Initialize Player Character Controller!"));
 }
 
 AGASPlayerController::AGASPlayerController()
@@ -44,6 +51,9 @@ void AGASPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 	
 	//Binding Input Actions To Functions
+	
+	UMovingCameraComponent* Camera = CameraComponent;
+	
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
@@ -51,65 +61,65 @@ void AGASPlayerController::SetupInputComponent()
 		if (IA_Movement)
 		{
 			EnhancedInputComponent->BindAction(IA_Movement, ETriggerEvent::Triggered, this,
-											   &AGASPlayerController::CharacterMovement);
+											   &AGASPlayerController::OnMovementAction);//OnMovementAction
 		}
 
 		if (IA_CameraMovement)
 		{
 			EnhancedInputComponent->BindAction(IA_CameraMovement, ETriggerEvent::Started, this,
-											   &AGASPlayerController::DetachCamera);
+											   &AGASPlayerController::OnDetachCameraAction);
 			EnhancedInputComponent->BindAction(IA_CameraMovement, ETriggerEvent::Triggered, this,
-											   &AGASPlayerController::CameraMovement);
+											   &AGASPlayerController::OnCameraMovementAction);
 		}
 
 		if (IA_AttachCamera)
 		{
 			EnhancedInputComponent->BindAction(IA_AttachCamera, ETriggerEvent::Triggered, this,
-											   &AGASPlayerController::AttachCamera);
+											   &AGASPlayerController::OnAttachCameraAction);
 		}
 
 		if (IA_RotateCamera) 
 		{
 			EnhancedInputComponent->BindAction(IA_RotateCamera, ETriggerEvent::Started, this,
-												   &AGASPlayerController::AttachCamera);
+												   &AGASPlayerController::OnAttachCameraAction);
 			EnhancedInputComponent->BindAction(IA_RotateCamera, ETriggerEvent::Triggered, this,
-											   &AGASPlayerController::RotateCamera);
+											   &AGASPlayerController::OnRotateCameraAction);
 		}
 
 		if (IA_Attack) 
 		{
 			EnhancedInputComponent->BindAction(IA_Attack, ETriggerEvent::Started, this,
-											   &AGASPlayerController::Attack);
+											   &AGASPlayerController::OnAttackAction);
 		}
 
 		if (IA_Roll)
 		{
-			EnhancedInputComponent->BindAction(IA_Roll, ETriggerEvent::Started, this, &AGASPlayerController::Roll);
+			EnhancedInputComponent->BindAction(IA_Roll, ETriggerEvent::Started, this, &AGASPlayerController::OnRollAction);
 		}
 
 		if (IA_Parry)
 		{
-			EnhancedInputComponent->BindAction(IA_Parry, ETriggerEvent::Started, this, &AGASPlayerController::Parry);
+			EnhancedInputComponent->BindAction(IA_Parry, ETriggerEvent::Started, this, &AGASPlayerController::OnParryAction);
 		}
 
 		if (IA_CastSpell)
 		{
-			EnhancedInputComponent->BindAction(IA_CastSpell, ETriggerEvent::Started, this, &AGASPlayerController::CastSpell);
+			EnhancedInputComponent->BindAction(IA_CastSpell, ETriggerEvent::Started, this, &AGASPlayerController::OnCastSpellAction);
 		}
 		
 		if (IA_Inventory)
 		{
-			EnhancedInputComponent->BindAction(IA_Inventory, ETriggerEvent::Started, this, &AGASPlayerController::Inventory);
+			EnhancedInputComponent->BindAction(IA_Inventory, ETriggerEvent::Started, this, &AGASPlayerController::OnInventoryAction);
 		}
 
 		if (IA_UseConsumable)
 		{
-			EnhancedInputComponent->BindAction(IA_UseConsumable, ETriggerEvent::Started, this, &AGASPlayerController::UseConsumable);
+			EnhancedInputComponent->BindAction(IA_UseConsumable, ETriggerEvent::Started, this, &AGASPlayerController::OnUseConsumableAction);
 		}
 
 		if (IA_Interact)
 		{
-			EnhancedInputComponent->BindAction(IA_Interact, ETriggerEvent::Started, this, &AGASPlayerController::Interact);
+			EnhancedInputComponent->BindAction(IA_Interact, ETriggerEvent::Started, this, &AGASPlayerController::OnInteractAction);
 		}
 	}
 }
@@ -139,7 +149,7 @@ void AGASPlayerController::SetCanMove(bool bNewValue)
 	bCanMove = bNewValue;
 }
 
-void AGASPlayerController::CharacterMovement()
+void AGASPlayerController::OnMovementAction()
 {
 	if (bCanMove)
 	{
@@ -152,79 +162,65 @@ void AGASPlayerController::CharacterMovement()
 	}
 }
 
-void AGASPlayerController::CameraMovement(const FInputActionValue& Value)
+void AGASPlayerController::OnCameraMovementAction(const FInputActionValue& Value)
 {
-
-	//Calculate The Direction Of Camera Movement
-	const float Angle = CharacterSpringArmComponent->GetRelativeRotation().Yaw;
-	const FVector Direction (UKismetMathLibrary::GetRotated2D(FVector2d(Value[0], Value[1]), Angle), 0.f);
-
-	//Calculate And Set New Location For Camera
-	FVector Location = CharacterCameraComponent->GetRelativeLocation();
-	//FVector Location = CharacterSpringArmComponent->GetRelativeLocation();
-	Location += CameraSpeed * Direction;
-	//CharacterSpringArmComponent->SetRelativeLocation(Location, true);
-	CharacterCameraComponent->SetRelativeLocation(Location, true);
+	CameraComponent->MoveCamera(Value);
 }
 
 //Attach Camera Back To Spring Component
 
-void AGASPlayerController::AttachCamera() 
+void AGASPlayerController::OnAttachCameraAction() 
 {
 	
-	if (CharacterSpringArmComponent && !bIsCameraAttached)
+	if (SpringArmComponent && !bIsCameraAttached)
 	{
-		CharacterCameraComponent->AttachToComponent(CharacterSpringArmComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false));
-		//CharacterSpringArmComponent->AttachToComponent(MainCharacter->GetRootComponent(), FAttachmentTransformRules(EAttachmentRule::KeepWorld, false));
+		CameraComponent->AttachToComponent(SpringArmComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false));
 		bIsCameraAttached = true;
 	}
 }
 
 //Detach Camera From Spring Component
 
-void AGASPlayerController::DetachCamera() 
+void AGASPlayerController::OnDetachCameraAction() 
 {
-	if (bIsCameraAttached && CharacterSpringArmComponent && CharacterCameraComponent)
+	if (bIsCameraAttached && SpringArmComponent && CameraComponent)
     {
-		CharacterCameraComponent->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
-		//CharacterSpringArmComponent->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
+		CameraComponent->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
 		bIsCameraAttached = false;
     }
 }
 
 // Rotate Camera Around Character
 
-void AGASPlayerController::RotateCamera(const FInputActionValue& Value)
+void AGASPlayerController::OnRotateCameraAction(const FInputActionValue& Value)
 {
 	if (bIsCameraAttached)
 	{
-		FRotator Rotation = CharacterSpringArmComponent->GetRelativeRotation();
-		Rotation.Yaw -= Value[0] * CameraAngleSpeed;
-		CharacterSpringArmComponent->SetRelativeRotation(Rotation);
+		SpringArmComponent->RotateCamera(Value);
 	}
 }
 
-void AGASPlayerController::Attack()
+void AGASPlayerController::OnAttackAction()
 {
 	PlayerCharacter->Attack();
 }
 
-void AGASPlayerController::Roll()
+void AGASPlayerController::OnRollAction()
 {
 	PlayerCharacter->Roll();
 }
 
-void AGASPlayerController::Parry()
+void AGASPlayerController::OnParryAction()
 {
 	PlayerCharacter->Parry();
 }
 
-void AGASPlayerController::CastSpell()
+void AGASPlayerController::OnCastSpellAction()
 {
 	PlayerCharacter->CastSpell();
 }
 
-void AGASPlayerController::Inventory()
+void AGASPlayerController::OnInventoryAction()
 {
 	if (!bIsInventoryOpened)
 	{
@@ -241,15 +237,15 @@ void AGASPlayerController::Inventory()
 	bIsInventoryOpened = !bIsInventoryOpened;
 }
 
-void AGASPlayerController::UseConsumable()
+void AGASPlayerController::OnUseConsumableAction()
 {
 	PlayerCharacter->UseConsumable();
 }
 
-void AGASPlayerController::Interact()
+void AGASPlayerController::OnInteractAction()
 {
 	TArray<AActor*> OverlappingActors;
-	TSubclassOf<AInteractableBase> ClassFilter;
+	const TSubclassOf<AInteractableBase> ClassFilter;
 	PlayerCharacter->GetOverlappingActors(OverlappingActors, ClassFilter);
 	for (AActor* OverlappingActor : OverlappingActors)
 	{

@@ -2,15 +2,16 @@
 
 
 #include "GAS/Character/Player/GASMainCharacter.h"
-
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/Character/Player/GASPlayerController.h"
+#include "Camera/MovingCameraComponent.h"
+#include "Camera/RotatingSpringArmComponent.h"
 
 AGASMainCharacter::AGASMainCharacter()
 {
 	
-	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArmComponent = CreateDefaultSubobject<URotatingSpringArmComponent>(TEXT("SpringArm"));
 	SpringArmComponent->SetupAttachment(RootComponent);
 	bUseControllerRotationYaw = true;
 	SpringArmComponent->TargetArmLength = SpringArmLength;
@@ -20,7 +21,7 @@ AGASMainCharacter::AGASMainCharacter()
 	SpringArmComponent->bInheritRoll = false;
 	SpringArmComponent->SetRelativeRotation(FRotator(-60.f, -30.f, 0.f));
 
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	CameraComponent = CreateDefaultSubobject<UMovingCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
 	
 }
@@ -166,4 +167,14 @@ float AGASMainCharacter::GetStamina() const
 float AGASMainCharacter::GetMaxStamina() const
 {
 	return AttributeSet->GetMaxStamina();
+}
+
+UMovingCameraComponent* AGASMainCharacter::GetMovingCameraComponent() const
+{
+	return CameraComponent;
+}
+
+URotatingSpringArmComponent* AGASMainCharacter::GetRotatingSpringArmComponent() const
+{
+	return SpringArmComponent;
 }

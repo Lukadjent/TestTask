@@ -43,12 +43,11 @@ void AWeapon::OnAttack()
 void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AGASBaseCharacter* HitActor = Cast<AGASBaseCharacter>(OtherActor);
-	if (HitActor && HitActor != OwningPawn)
+	if (OtherActor && OtherActor != OwningPawn)
 	{
-		if (!HitActors.Contains(HitActor))
+		if (!HitActors.Contains(OtherActor))
 		{
-			HitActors.Add(HitActor);
+			HitActors.Add(OtherActor);
 			FGameplayEventData Data;
 			Data.Instigator = OwningPawn;
 			Data.Target = OtherActor;

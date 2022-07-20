@@ -54,7 +54,7 @@ protected:
 	FGameplayTag Hit;
 
 	UPROPERTY()
-	TArray<AGASBaseCharacter*> HitActors;
+	TArray<AActor*> HitActors;
 
 	FTimerHandle ClearAttackCounterTimerHandle;
 

@@ -55,10 +55,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "MoveSpeed")
 	FGameplayAttributeData MoveSpeed;
 	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, MoveSpeed)
-	
-	FString TakeDamageTag = "Status.Damaged";
 
-	FString DeathTag = "Status.Dead";
+	const FString TakeDamageTag = "Status.Damaged";
+
+	const FString DeathTag = "Status.Dead";
 
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 };

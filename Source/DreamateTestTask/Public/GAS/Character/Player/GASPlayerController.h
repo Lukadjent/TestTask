@@ -33,9 +33,9 @@ protected:
 #pragma region CHARACTER_CAMERA
 
 	UPROPERTY()
-	UCameraComponent* CharacterCameraComponent;
+	UMovingCameraComponent* CameraComponent;
 	UPROPERTY()
-	USpringArmComponent* CharacterSpringArmComponent;
+	URotatingSpringArmComponent* SpringArmComponent;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Camera")
 	float CameraSpeed = 20.f;
@@ -89,20 +89,20 @@ protected:
 	int32 CombatMappingPriority = 1;
 
 	// INPUT FUNCTIONS //
-	void CharacterMovement();
-	void CameraMovement(const FInputActionValue& Value);
-	void AttachCamera();
-	void DetachCamera();
-	void RotateCamera(const FInputActionValue& Value);
-	void Attack();
-	void Roll();
-	void Parry();
-	void CastSpell();
-	void UseConsumable();
-	void Interact();
+	void OnMovementAction();
+	void OnCameraMovementAction(const FInputActionValue& Value);
+	void OnAttachCameraAction();
+	void OnDetachCameraAction();
+	void OnRotateCameraAction(const FInputActionValue& Value);
+	void OnAttackAction();
+	void OnRollAction();
+	void OnParryAction();
+	void OnCastSpellAction();
+	void OnUseConsumableAction();
+	void OnInteractAction();
 
 	UFUNCTION(BlueprintCallable)
-	void Inventory();
+	void OnInventoryAction();
 
 #pragma endregion
 

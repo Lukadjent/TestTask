@@ -29,6 +29,8 @@ class DREAMATETESTTASK_API ADreamateTestTaskGameModeBase : public AGameModeBase
 
 	void OnPlayerCharacterDeath(AGASBaseCharacter* Character);
 
+
+	//
 	UPROPERTY()
 	UPlayAgainWidget* PlayAgainWidget;
 

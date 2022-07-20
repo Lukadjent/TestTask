@@ -3,8 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Camera/CameraComponent.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraInterface.h"
 #include "GAS/Character/AI/GASBaseCharacter.h"
 #include "GASMainCharacter.generated.h"
 
@@ -12,7 +11,7 @@
  * 
  */
 UCLASS()
-class DREAMATETESTTASK_API AGASMainCharacter : public AGASBaseCharacter
+class DREAMATETESTTASK_API AGASMainCharacter : public AGASBaseCharacter, public ICameraInterface
 {
 	GENERATED_BODY()
 
@@ -28,10 +27,10 @@ public:
 #pragma region CAMERA
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	USpringArmComponent* SpringArmComponent;
+	URotatingSpringArmComponent* SpringArmComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UCameraComponent* CameraComponent;
+	UMovingCameraComponent* CameraComponent;
 	
 	float SpringArmLength = 1000.f;
 	
@@ -76,5 +75,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
 	float GetMaxStamina() const;
-	
+
+	virtual UMovingCameraComponent* GetMovingCameraComponent() const override;
+
+	virtual URotatingSpringArmComponent* GetRotatingSpringArmComponent() const override;
 };
