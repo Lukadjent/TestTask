@@ -17,17 +17,17 @@ public:
 	// Sets default values for this component's properties
 	UMovingCameraComponent();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
+private:
 	//UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Camera|Settings")
 	const float CameraMoveSpeed = 20.f;
 
+	bool bIsCameraAttached = true;
+
 
 public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 	void MoveCamera(const FInputActionValue& Value);
+
+	void AttachCameraToComponent(USceneComponent* Component, FName SocketName = NAME_None);
+
+	void DetachCameraFromParent();
 };

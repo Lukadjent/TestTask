@@ -18,21 +18,14 @@ void AGASPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	//Initialize MainCharacter and Components
-
-	PlayerCharacter = Cast<AGASMainCharacter>(GetPawn());
-	if (PlayerCharacter)
-	{
-		CameraComponent = PlayerCharacter->CameraComponent;
-		SpringArmComponent = PlayerCharacter->SpringArmComponent;
-	}
 	const ICameraInterface* Camera = Cast<ICameraInterface>(GetPawn());
-	if (Camera)
+	if (!Camera)
 	{
-		CameraComponent = Camera->GetMovingCameraComponent();
-		SpringArmComponent = Camera->GetRotatingSpringArmComponent();
+		UE_LOG(LogTemp, Error, TEXT("AMainCharacterController: Failed To Initialize CAMERA in GASPlayerCharacterController!"));
 		return;
 	}
-	UE_LOG(LogTemp, Error, TEXT("AMainCharacterController: Failed To Initialize Player Character Controller!"));
+	CameraComponent = Camera->GetMovingCameraComponent();
+	SpringArmComponent = Camera->GetRotatingSpringArmComponent();
 }
 
 AGASPlayerController::AGASPlayerController()
@@ -171,30 +164,21 @@ void AGASPlayerController::OnCameraMovementAction(const FInputActionValue& Value
 
 void AGASPlayerController::OnAttachCameraAction() 
 {
-	
-	if (SpringArmComponent && !bIsCameraAttached)
-	{
-		CameraComponent->AttachToComponent(SpringArmComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false));
-		bIsCameraAttached = true;
-	}
+	CameraComponent->AttachCameraToComponent(SpringArmComponent);
 }
 
 //Detach Camera From Spring Component
 
 void AGASPlayerController::OnDetachCameraAction() 
 {
-	if (bIsCameraAttached && SpringArmComponent && CameraComponent)
-    {
-		CameraComponent->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
-		bIsCameraAttached = false;
-    }
+	CameraComponent->DetachCameraFromParent();
 }
 
 // Rotate Camera Around Character
 
 void AGASPlayerController::OnRotateCameraAction(const FInputActionValue& Value)
 {
-	if (bIsCameraAttached)
+	if (CameraComponent->IsAttachedTo(SpringArmComponent))
 	{
 		SpringArmComponent->RotateCamera(Value);
 	}
