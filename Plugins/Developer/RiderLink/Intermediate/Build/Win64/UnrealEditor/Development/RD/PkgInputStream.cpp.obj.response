@@ -1,21 +1,21 @@
-D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp\src\main\wire\PkgInputStream.cpp
+D:\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp\src\main\wire\PkgInputStream.cpp
 /I .
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\src
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_core_cpp
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_core_cpp\src\main
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp\src\main
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp\src\main\util
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_gen_cpp\src
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\ordered-map\include
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\optional\tl
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\variant\include
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\string-view-lite\include
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\spdlog\include
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\clsocket\src
-/I D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\CTPL\include
+/I D:\TestTask\Plugins\Developer\RiderLink\Source
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\src
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_core_cpp
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_core_cpp\src\main
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp\src\main
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp\src\main\util
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_gen_cpp\src
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\ordered-map\include
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\optional\tl
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\variant\include
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\string-view-lite\include
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\spdlog\include
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\clsocket\src
+/I D:\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\CTPL\include
 /I Runtime
 /I Runtime\TraceLog\Public
 /I Runtime\Core\Public
@@ -26,9 +26,9 @@ D:\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp\src\main\
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"
-/FI"D:\Dreamate\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RD\Definitions.h"
-/Fo"D:\Dreamate\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RD\PkgInputStream.cpp.obj"
-/sourceDependencies D:\Dreamate\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RD\PkgInputStream.cpp.json
+/FI"D:\TestTask\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RD\Definitions.h"
+/Fo"D:\TestTask\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RD\PkgInputStream.cpp.obj"
+/sourceDependencies D:\TestTask\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RD\PkgInputStream.cpp.json
 /Zc:inline
 /nologo
 /Oi

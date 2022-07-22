@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
-#include "AbilitySystemInterface.h"
 #include "Enum/EAbilities.h"
 #include "GameFramework/Character.h"
+#include "GAS/AbilitySystemComponentInterface.h"
+#include "GAS/ASComponent.h"
 #include "GAS/AttributeSet/BaseAttributeSet.h"
+#include "Inventory/InventoryInterface.h"
 #include "Inventory/InventoryTypes.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "GASBaseCharacter.generated.h"
@@ -15,7 +17,7 @@
 class UInventoryComponent;
 
 UCLASS()
-class DREAMATETESTTASK_API AGASBaseCharacter : public ACharacter, public IAbilitySystemInterface
+class DREAMATETESTTASK_API AGASBaseCharacter : public ACharacter, public IAbilitySystemComponentInterface, public IInventoryInterface
 {
 	GENERATED_BODY()
 
@@ -36,7 +38,7 @@ protected:
 	UInventoryComponent* Inventory;
 	
 	UPROPERTY(EditDefaultsOnly)
-	UAbilitySystemComponent* AbilitySystemComponent;
+	UASComponent* AbilitySystemComponent;
 
 #pragma endregion
 	
@@ -48,36 +50,16 @@ protected:
 	TArray<TSubclassOf<class UGameplayEffect>> StartupEffects;
 
 	void InitializeDefaultAttributesAndEffects();
-
-	//Abilities character gets from weapon slots
-	TMap<FItemSlot, FGameplayAbilitySpecHandle> SlottedAbilities;
-
-	//Abilities character has by default
-	UPROPERTY(EditDefaultsOnly)
-	TMap<EAbilities, TSubclassOf<UGameplayAbility>> StandardAbilities;
-
+	
 	void OnMovementSpeedChange(const FOnAttributeChangeData& Data);
 
 	//On add or remove immobile tag
 	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 
-public:	
+	void SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item);
 
-	//Activate ability given by item that is slotted
-	UFUNCTION()
-	bool ActivateAbilitiesWithItemSlot(FItemSlot ItemSlot);
-
-	//Remove ability when slotted item changes
-	UFUNCTION(BlueprintCallable, Category = "Ability")
-	void RemoveSlottedGameplayAbilities(FItemSlot InSlot);
-
-	//Add ability when slotted item changes
-	UFUNCTION()
-	void AddSlottedGameplayAbilities();
+public:
 	
-	UFUNCTION()
-	void FillSlottedAbilitySpecs(TMap<FItemSlot, FGameplayAbilitySpec>& SlottedAbilitySpecs);
-
 	//Delegate on Character Death
 	DECLARE_MULTICAST_DELEGATE_OneParam(FCharacterDeath, AGASBaseCharacter*);
 	FCharacterDeath CharacterDeath;
@@ -85,17 +67,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void NotifyDeath();
 
-	//Attack Function
-	bool Attack();
 
 #pragma region COMPONENT_GETTERS
-	
-	UInventoryComponent* GetInventoryComponent() const;
 
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	virtual UASComponent* GetAbilitySystemComponent() const override;
+	
+	virtual UInventoryComponent* GetInventoryComponent() const override;
 
 	UChildActorComponent* GetWeaponComponent() const;
 
 #pragma endregion
-
+	
 };

@@ -11,11 +11,17 @@ UBTTaskAttack::UBTTaskAttack()
 
 EBTNodeResult::Type UBTTaskAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	if (AGASBaseEnemy* Pawn = Cast<AGASBaseEnemy>(Cast<AGASAIController>(OwnerComp.GetOwner())->GetPawn()))
+	APawn* Pawn = Cast<AGASBaseEnemy>(Cast<AGASAIController>(OwnerComp.GetOwner())->GetPawn());
+	const IAbilitySystemComponentInterface* ASCInterface = Cast<IAbilitySystemComponentInterface>(Pawn);
+	if (ASCInterface)
 	{
-		if (Pawn->Attack())
+		UASComponent* ASC = ASCInterface->GetAbilitySystemComponent();
+		if (ASC)
 		{
-			return EBTNodeResult::Succeeded;
+			if (ASC->Attack())
+			{
+				return EBTNodeResult::Succeeded;
+			}
 		}
 	}
 	return EBTNodeResult::Failed;

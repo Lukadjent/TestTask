@@ -36,15 +36,6 @@ protected:
 	UMovingCameraComponent* CameraComponent;
 	UPROPERTY()
 	URotatingSpringArmComponent* SpringArmComponent;
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Camera")
-	float CameraSpeed = 20.f;
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Camera")
-	float CameraAngleSpeed = 1.0f;
-	
-	bool bIsCameraAttached = true;
-	UPROPERTY()
-	AGASMainCharacter* PlayerCharacter;
 
 #pragma endregion
 	
@@ -127,6 +118,9 @@ protected:
 
 #pragma endregion
 
+	UPROPERTY()
+	UASComponent* ASComponent;
+	
 	bool bCanMove = true;
 	
 public:

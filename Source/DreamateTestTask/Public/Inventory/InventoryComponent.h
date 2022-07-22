@@ -10,7 +10,6 @@
 
 class AGASBaseCharacter;
 
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DREAMATETESTTASK_API UInventoryComponent : public UActorComponent
 {
@@ -19,8 +18,6 @@ class DREAMATETESTTASK_API UInventoryComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UInventoryComponent();
-	
-	FItemSlot EquippedWeapon;
 
 protected:
 	// Called when the game starts
@@ -47,12 +44,6 @@ protected:
 	FOnInventoryItemChanged OnInventoryItemChanged;
 	
 	FOnInventoryItemChangedNative OnInventoryItemChangedNative;
-
-	//Delegates when slotted item changes
-	UPROPERTY(BlueprintAssignable, Category = "Inventory")
-	FOnSlottedItemChanged OnSlottedItemChanged;
-
-	FOnSlottedItemChangedNative OnSlottedItemChangedNative;
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	void SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item);
@@ -87,7 +78,14 @@ protected:
 	UPROPERTY()
 	AGASBaseCharacter* Owner = nullptr;
 
-public:	
+public:
+
+	//Delegates when slotted item changes
+	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+	FOnSlottedItemChanged OnSlottedItemChanged;
+
+	FOnSlottedItemChangedNative OnSlottedItemChangedNative;
+	
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool AddInventoryItem(UItemData* NewItem, int32 ItemCount = 1);
 	
@@ -95,4 +93,5 @@ public:
 	const TMap<UItemData*, FItemDataStruct>& GetInventoryDataMap() const;
 
 	const TMap<FItemSlot, UItemData*>& GetSlottedItemMap() const;
+	
 };

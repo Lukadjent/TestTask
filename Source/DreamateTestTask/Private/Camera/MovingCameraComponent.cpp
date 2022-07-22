@@ -21,7 +21,7 @@ void UMovingCameraComponent::MoveCamera(const FInputActionValue& Value)
 
 void UMovingCameraComponent::AttachCameraToComponent(USceneComponent* Component, FName SocketName)
 {
-	if (bIsCameraAttached)
+	if (!bIsCameraAttached)
 	{
 		AttachToComponent(Component, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false), SocketName);
 		bIsCameraAttached = true;

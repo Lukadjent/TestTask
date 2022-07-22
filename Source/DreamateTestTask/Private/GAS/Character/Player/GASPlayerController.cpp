@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "VectorTypes.h"
 #include "Camera/MovingCameraComponent.h"
+#include "GAS/AbilitySystemComponentInterface.h"
 #include "InteractableObjects/InteractableBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -24,8 +25,16 @@ void AGASPlayerController::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("AMainCharacterController: Failed To Initialize CAMERA in GASPlayerCharacterController!"));
 		return;
 	}
+	const IAbilitySystemComponentInterface* AbilitySystemComponent = Cast<IAbilitySystemComponentInterface>(GetPawn());
+	if (!AbilitySystemComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("AMainCharacterController: Failed To Initialize ABILITY SYSTEM COMPONENT in GASPlayerCharacterController!"));
+		return;
+	}
 	CameraComponent = Camera->GetMovingCameraComponent();
 	SpringArmComponent = Camera->GetRotatingSpringArmComponent();
+	ASComponent = AbilitySystemComponent->GetAbilitySystemComponent();
+	
 }
 
 AGASPlayerController::AGASPlayerController()
@@ -186,22 +195,22 @@ void AGASPlayerController::OnRotateCameraAction(const FInputActionValue& Value)
 
 void AGASPlayerController::OnAttackAction()
 {
-	PlayerCharacter->Attack();
+	ASComponent->Attack();
 }
 
 void AGASPlayerController::OnRollAction()
 {
-	PlayerCharacter->Roll();
+	ASComponent->Roll();
 }
 
 void AGASPlayerController::OnParryAction()
 {
-	PlayerCharacter->Parry();
+	ASComponent->Parry();
 }
 
 void AGASPlayerController::OnCastSpellAction()
 {
-	PlayerCharacter->CastSpell();
+	ASComponent->CastSpell();
 }
 
 void AGASPlayerController::OnInventoryAction()
@@ -223,12 +232,12 @@ void AGASPlayerController::OnInventoryAction()
 
 void AGASPlayerController::OnUseConsumableAction()
 {
-	PlayerCharacter->UseConsumable();
+	ASComponent->UseConsumable();
 }
 
 void AGASPlayerController::OnInteractAction()
 {
-	TArray<AActor*> OverlappingActors;
+	/*TArray<AActor*> OverlappingActors;
 	const TSubclassOf<AInteractableBase> ClassFilter;
 	PlayerCharacter->GetOverlappingActors(OverlappingActors, ClassFilter);
 	for (AActor* OverlappingActor : OverlappingActors)
@@ -238,7 +247,7 @@ void AGASPlayerController::OnInteractAction()
 			Interactable->OnInteraction(PlayerCharacter);
 			break;
 		}
-	}
+	}*/
 }
 
 FGenericTeamId AGASPlayerController::GetGenericTeamId() const

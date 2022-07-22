@@ -71,26 +71,6 @@ void AGASMainCharacter::ImmobileTagChanged(const FGameplayTag CallbackTag, int32
 	}
 }
 
-void AGASMainCharacter::Roll()
-{
-	AbilitySystemComponent->TryActivateAbilityByClass(StandardAbilities[EAbilities::Roll]);
-}
-
-void AGASMainCharacter::Parry()
-{
-	AbilitySystemComponent->TryActivateAbilityByClass(StandardAbilities[EAbilities::Parry]);
-}
-
-void AGASMainCharacter::CastSpell()
-{
-	AbilitySystemComponent->TryActivateAbilityByClass(StandardAbilities[EAbilities::CastSpell]);
-}
-
-bool AGASMainCharacter::UseConsumable()
-{
-	return ActivateAbilitiesWithItemSlot(UItemAssetManager::PotionItemType);
-}
-
 void AGASMainCharacter::MaxHealthChanged(const FOnAttributeChangeData& Data)
 {
 	float MaxHealth = Data.NewValue;

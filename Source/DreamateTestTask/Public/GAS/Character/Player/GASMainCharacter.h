@@ -23,7 +23,7 @@ class DREAMATETESTTASK_API AGASMainCharacter : public AGASBaseCharacter, public 
 
 	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
 
-public: 
+protected:
 #pragma region CAMERA
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -35,23 +35,13 @@ public:
 	float SpringArmLength = 1000.f;
 	
 #pragma endregion
-
-#pragma region ABILITIES
-	
-	void Roll();
-
-	void Parry();
-
-	void CastSpell();
-
-	bool UseConsumable();
-
-#pragma endregion
 	
 	FDelegateHandle MaxHealthChangedDelegateHandle;
 	FDelegateHandle MaxManaChangedDelegateHandle;
 	FDelegateHandle MaxStaminaChangedDelegateHandle;
 	FDelegateHandle StaminaRegenRateChangedDelegateHandle;
+
+public:
 	
 	virtual void MaxHealthChanged(const FOnAttributeChangeData& Data);
 	virtual void MaxManaChanged(const FOnAttributeChangeData& Data);
