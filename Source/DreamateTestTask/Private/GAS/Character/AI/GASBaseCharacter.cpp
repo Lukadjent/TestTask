@@ -27,6 +27,8 @@ UChildActorComponent* AGASBaseCharacter::GetWeaponComponent() const
 // Called when the game starts or when spawned
 void AGASBaseCharacter::BeginPlay()
 {
+	Inventory->OnSlottedItemChangedNative.AddUObject(this, &AGASBaseCharacter::SlottedItemChanged);
+	
 	Super::BeginPlay();
 	
 	//Binding function on MoveSpeedChange
@@ -35,8 +37,7 @@ void AGASBaseCharacter::BeginPlay()
 	//Binding function on Immobile tag added/removed
 	AbilitySystemComponent->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag(FName("Status.Immobile")),
 	                                                 EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AGASBaseCharacter::ImmobileTagChanged);
-
-	Inventory->OnSlottedItemChanged.AddDynamic(this, &AGASBaseCharacter::SlottedItemChanged);
+	
 }
 
 void AGASBaseCharacter::InitializeDefaultAttributesAndEffects()

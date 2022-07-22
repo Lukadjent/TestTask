@@ -18,28 +18,9 @@ UInventoryComponent::UInventoryComponent()
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	Owner = Cast<AGASBaseCharacter>(GetOwner());
-	//OnSlottedItemChanged.AddDynamic(this, &UInventoryComponent::SlottedItemChanged);
 	Initialize();
 	
 }
-
-void UInventoryComponent::SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item)
-{
-	if (Owner)
-	{
-		if (ItemSlot.GetItemType() == UItemAssetManager::WeaponItemType)
-		{
-			if (const UWeaponItemData* WeaponData = Cast<UWeaponItemData>(Item))
-			{
-				Owner->GetWeaponComponent()->SetChildActorClass(WeaponData->GetWeaponClass());
-			}
-		}
-		Owner->GetAbilitySystemComponent()->RemoveSlottedGameplayAbilities(ItemSlot);
-		Owner->GetAbilitySystemComponent()->AddSlottedGameplayAbilities();	
-	}
-}
-
 
 void UInventoryComponent::Initialize()
 {

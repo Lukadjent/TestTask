@@ -45,9 +45,6 @@ protected:
 	
 	FOnInventoryItemChangedNative OnInventoryItemChangedNative;
 
-	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	void SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item);
-
 	//Give default items
 	UFUNCTION(BlueprintCallable)
 	void Initialize();
@@ -74,9 +71,6 @@ protected:
 	UItemData* GetSlottedItem(FItemSlot Slot);
 	
 	void NotifySlottedItemChanged(FItemSlot Slot, UItemData* Item);
-
-	UPROPERTY()
-	AGASBaseCharacter* Owner = nullptr;
 
 public:
 
