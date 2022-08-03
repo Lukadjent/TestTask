@@ -2,7 +2,11 @@
 
 #include "GAS/Character/AI/GASBaseEnemy.h"
 
+#include "CharacterDeathHandleInterface.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/GameMode.h"
+#include "GameFramework/GameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "UI/FloatingBarWidget.h"
 
@@ -10,46 +14,19 @@
 AGASBaseEnemy::AGASBaseEnemy()
 {
 	
-	/*WidgetComponent = CreateDefaultSubobject<UWidgetComponent>("WidgetComponent");
-	WidgetComponent->SetupAttachment(RootComponent);
-	WidgetComponent->SetRelativeLocation(FVector(0.f,0.f, 120.f));
-	WidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
-	WidgetComponent->SetDrawSize(FVector2d(500, 500));*/
-	
 }
 
 void AGASBaseEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-
-	/*//Bind function on health attribute changed
-	HealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &AGASBaseEnemy::HealthChanged);
-	
-	InitializeDefaultAttributesAndEffects();
-
-	FloatingBarWidget = CreateWidget<UFloatingBarWidget>(GetWorld(), FloatingBarClass);
-	
-	if (FloatingBarWidget && WidgetComponent)
+	ICharacterDeathHandleInterface* CharacterDeathHandleInterface = Cast<ICharacterDeathHandleInterface>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (CharacterDeathHandleInterface)
 	{
-		WidgetComponent->SetWidget(FloatingBarWidget);
-
-		if (AttributeSet)
-		{
-			FloatingBarWidget->SetCurrentHealth(AttributeSet->GetHealth());
-			FloatingBarWidget->SetMaxHealth(AttributeSet->GetMaxHealth());
-		}
-	}*/
-	
-}
-
-/*void AGASBaseEnemy::HealthChanged(const FOnAttributeChangeData& Data)
-{
-	float Health = Data.NewValue;
-	if (FloatingBarWidget)
-	{
-		FloatingBarWidget->SetCurrentHealth(Health);
+		CharacterDeathHandleInterface->AddToEnemyArray();
+		CharacterDeath.AddRaw(CharacterDeathHandleInterface, &ICharacterDeathHandleInterface::OnEnemyCharacterDeath);
+		CharacterDeath.AddUObject(this, &AGASBaseEnemy::OnDeath);
 	}
-}*/
+}
 
 void AGASBaseEnemy::ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
@@ -62,6 +39,12 @@ void AGASBaseEnemy::ImmobileTagChanged(const FGameplayTag CallbackTag, int32 New
 	{
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	}
+}
+
+void AGASBaseEnemy::OnDeath()
+{
+	SpawnLoot();
+	Destroy();
 }
 
 TArray<ATargetPoint*> AGASBaseEnemy::GetPatrolPoints() const

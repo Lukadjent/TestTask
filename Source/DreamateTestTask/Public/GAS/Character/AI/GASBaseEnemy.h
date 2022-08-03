@@ -55,6 +55,8 @@ protected:
 
 	//Override of function that reacts on Immobile tag added/removed
 	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
+
+	void OnDeath();
 	
 public:
 

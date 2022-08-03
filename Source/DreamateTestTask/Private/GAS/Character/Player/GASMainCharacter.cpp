@@ -2,11 +2,15 @@
 
 
 #include "GAS/Character/Player/GASMainCharacter.h"
+
+#include "CharacterDeathHandleInterface.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/Character/Player/GASPlayerController.h"
 #include "Camera/MovingCameraComponent.h"
 #include "Camera/RotatingSpringArmComponent.h"
+#include "GameFramework/GameMode.h"
+#include "Kismet/GameplayStatics.h"
 
 AGASMainCharacter::AGASMainCharacter()
 {
@@ -29,6 +33,12 @@ AGASMainCharacter::AGASMainCharacter()
 void AGASMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+		
+	ICharacterDeathHandleInterface* CharacterDeathHandleInterface = Cast<ICharacterDeathHandleInterface>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (CharacterDeathHandleInterface)
+	{
+		CharacterDeath.AddRaw(CharacterDeathHandleInterface, &ICharacterDeathHandleInterface::OnPlayerCharacterDeath);
+	}
 	
 	if (AbilitySystemComponent)
 	{

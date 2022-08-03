@@ -53,9 +53,6 @@ void AGASPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 	
 	//Binding Input Actions To Functions
-	
-	UMovingCameraComponent* Camera = CameraComponent;
-	
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{

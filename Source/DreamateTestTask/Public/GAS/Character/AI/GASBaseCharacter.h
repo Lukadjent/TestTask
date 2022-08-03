@@ -61,7 +61,7 @@ protected:
 public:
 	
 	//Delegate on Character Death
-	DECLARE_MULTICAST_DELEGATE_OneParam(FCharacterDeath, AGASBaseCharacter*);
+	DECLARE_MULTICAST_DELEGATE(FCharacterDeath);
 	FCharacterDeath CharacterDeath;
 	
 	UFUNCTION(BlueprintCallable)

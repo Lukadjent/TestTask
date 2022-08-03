@@ -76,7 +76,7 @@ void AGASBaseCharacter::ImmobileTagChanged(const FGameplayTag CallbackTag, int32
 
 void AGASBaseCharacter::NotifyDeath()
 {
-	CharacterDeath.Broadcast(this);
+	CharacterDeath.Broadcast();
 }
 
 void AGASBaseCharacter::SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item)
