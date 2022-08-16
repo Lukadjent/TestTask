@@ -2,40 +2,13 @@
 
 
 #include "DreamateTestTask/Public/GAS/DreamateTestTaskGameModeBase.h"
-#include "Kismet/GameplayStatics.h"
 
-
-void ADreamateTestTaskGameModeBase::OnPlayerCharacterDeath() 
+void ADreamateTestTaskGameModeBase::Victory() const
 {
-	PlayAgainWidget = CreateWidget<UPlayAgainWidget>(GetWorld(), WidgetClass);
-	if (PlayAgainWidget)
-	{
-		PlayAgainWidget->SetText("You Died");
-		PlayAgainWidget->AddToViewport();
-	}
+	OnVictory.Broadcast();
 }
 
-void ADreamateTestTaskGameModeBase::OnEnemyCharacterDeath() 
+void ADreamateTestTaskGameModeBase::Lose() const
 {
-	EnemyCounter--;
-	if (EnemyCounter == 0)
-	{
-		Victory();
-	}
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, FString::Printf(TEXT("Enemy Died, %d left."), EnemyCounter));
-}
-
-void ADreamateTestTaskGameModeBase::AddToEnemyArray()
-{
-	++EnemyCounter;
-}
-
-void ADreamateTestTaskGameModeBase::Victory()
-{
-	PlayAgainWidget = CreateWidget<UPlayAgainWidget>(GetWorld(), WidgetClass);
-	if (PlayAgainWidget)
-	{
-		PlayAgainWidget->SetText("You Won");
-		PlayAgainWidget->AddToViewport();
-	}
+	OnLose.Broadcast();
 }

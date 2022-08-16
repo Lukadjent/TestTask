@@ -11,30 +11,23 @@
 /**
  * 
  */
+
+DECLARE_MULTICAST_DELEGATE(FVictoryDelegate)
+DECLARE_MULTICAST_DELEGATE(FLoseDelegate)
+
+
 UCLASS()
-class DREAMATETESTTASK_API ADreamateTestTaskGameModeBase : public AGameModeBase, public ICharacterDeathHandleInterface
+class DREAMATETESTTASK_API ADreamateTestTaskGameModeBase : public AGameModeBase
 {
-	GENERATED_BODY()
-
-	virtual void OnPlayerCharacterDeath()  override;
-
-	virtual void OnEnemyCharacterDeath()  override;
-
-	virtual void AddToEnemyArray() override;
-
-	//
-	UPROPERTY()
-	UPlayAgainWidget* PlayAgainWidget;
-
-
-protected:
-
-	int32 EnemyCounter;
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TSubclassOf<UPlayAgainWidget> WidgetClass;
+	GENERATED_BODY()	
 	
 public:
 
-	void Victory();
+	FVictoryDelegate OnVictory;
+
+	FLoseDelegate OnLose;
+	
+	void Victory() const;
+
+	void Lose() const;
 };
