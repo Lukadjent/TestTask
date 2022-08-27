@@ -38,8 +38,9 @@ void URotatingSpringArmComponent::TickComponent(float DeltaTime, ELevelTick Tick
 void URotatingSpringArmComponent::RotateCamera(const FInputActionValue& Value)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, FString::Printf(TEXT("RotatingSpringArmComponent : RotatingCamera")));
-	FRotator Rotation = GetRelativeRotation();
+	FRotator Rotation = GetComponentRotation();
 	Rotation.Yaw -= Value[0] * CameraAngleSpeed;
-	SetRelativeRotation(Rotation);
+	Rotation.Pitch -=Value[1] * CameraAngleSpeed;
+	SetWorldRotation(Rotation);
 }
 

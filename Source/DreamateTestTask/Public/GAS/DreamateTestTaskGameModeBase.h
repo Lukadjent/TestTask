@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "CharacterDeathHandleInterface.h"
 #include "GameFramework/GameModeBase.h"
-#include "UI/PlayAgainWidget.h"
 #include "DreamateTestTaskGameModeBase.generated.h"
 
 /**

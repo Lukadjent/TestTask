@@ -7,6 +7,7 @@
 #include "GenericTeamAgentInterface.h"
 #include "InputAction.h"
 #include "InputMappingContext.h"
+#include "PlayerControllerInterface.h"
 #include "DreamateTestTask/Public/UI/MainHUD.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/PlayerController.h"
@@ -18,7 +19,7 @@
  * 
  */
 UCLASS()
-class DREAMATETESTTASK_API AGASPlayerController : public APlayerController, public IGenericTeamAgentInterface
+class DREAMATETESTTASK_API AGASPlayerController : public APlayerController, public IGenericTeamAgentInterface, public IPlayerControllerInterface
 {
 	GENERATED_BODY()
 

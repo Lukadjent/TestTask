@@ -31,13 +31,15 @@ protected:
 	TSubclassOf<UUserWidget> PlayerHUDClass;
 
 #pragma region INVENTORY
+	
 	UPROPERTY(BlueprintReadOnly)
 	UInventoryWidget* InventoryWidget;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HUD")
 	TSubclassOf<UUserWidget> InventoryWidgetClass;
 
-	bool bIsInventoryOpened = false;
+	void HandleInventory();
+
 #pragma endregion 
 
 #pragma region END_OF_THE_GAME

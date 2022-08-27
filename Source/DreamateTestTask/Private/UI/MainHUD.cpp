@@ -2,9 +2,12 @@
 
 
 #include "UI/MainHUD.h"
+
+#include "PlayerControllerInterface.h"
 #include "Blueprint/UserWidget.h"
 #include "GAS/DreamateTestTaskGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "UI/LoseWidget.h"
 
 void AMainHUD::BeginPlay()
 {
@@ -22,6 +25,21 @@ void AMainHUD::BeginPlay()
 	if (MainHUDWidget)
 	{
 		MainHUDWidget->AddToViewport();
+	}
+
+	IPlayerControllerInterface* PlayerController = Cast<IPlayerControllerInterface>(GetOwningPlayerController());
+	if (PlayerController)
+	{
+		PlayerController->InventoryActionDelegate.AddUObject(this, &AMainHUD::HandleInventory);
+	}
+}
+
+void AMainHUD::HandleInventory()
+{
+	InventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), InventoryWidgetClass);
+	if (InventoryWidget)
+	{
+		InventoryWidget->AddToViewport();
 	}
 }
 

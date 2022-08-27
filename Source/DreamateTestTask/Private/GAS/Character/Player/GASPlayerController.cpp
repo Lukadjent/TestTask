@@ -212,19 +212,7 @@ void AGASPlayerController::OnCastSpellAction()
 
 void AGASPlayerController::OnInventoryAction()
 {
-	if (!bIsInventoryOpened)
-	{
-		InventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), InventoryWidgetClass);
-		if (InventoryWidget)
-		{
-			InventoryWidget->AddToViewport();
-		}
-	}
-	else
-	{
-		InventoryWidget->RemoveFromViewport();
-	}
-	bIsInventoryOpened = !bIsInventoryOpened;
+	InventoryActionDelegate.Broadcast();
 }
 
 void AGASPlayerController::OnUseConsumableAction()
