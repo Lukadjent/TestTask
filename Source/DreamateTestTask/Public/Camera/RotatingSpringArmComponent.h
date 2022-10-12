@@ -12,21 +12,10 @@ class DREAMATETESTTASK_API URotatingSpringArmComponent : public USpringArmCompon
 {
 	GENERATED_BODY()
 
-public:
-	// Sets default values for this component's properties
-	URotatingSpringArmComponent();
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Camera")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Camera", meta = (AllowPrivateAccess))
 	float CameraAngleSpeed = 1.f; 
 	
 public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 	void RotateCamera(const FInputActionValue& Value);
 };

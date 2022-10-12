@@ -3,9 +3,10 @@
 
 #include "UI/MainHUD.h"
 
+#include "GameModeInterface.h"
+#include "GameFramework/GameModeBase.h"
 #include "PlayerControllerInterface.h"
 #include "Blueprint/UserWidget.h"
-#include "GAS/DreamateTestTaskGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "UI/LoseWidget.h"
 
@@ -13,7 +14,7 @@ void AMainHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ADreamateTestTaskGameModeBase* GameMode = Cast<ADreamateTestTaskGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	IGameModeInterface* GameMode = Cast<IGameModeInterface>(UGameplayStatics::GetGameMode(GetWorld()));
 
 	if (GameMode)
 	{
@@ -21,7 +22,7 @@ void AMainHUD::BeginPlay()
 		GameMode->OnVictory.AddUObject(this, &AMainHUD::CreateVictoryWidget);
 	}
 	
-	MainHUDWidget = CreateWidget<UCharacterHUDWidget>(GetWorld(), PlayerHUDClass);
+	MainHUDWidget = CreateWidget<UCharacterHUDWidget>(GetOwningPlayerController(), PlayerHUDClass);
 	if (MainHUDWidget)
 	{
 		MainHUDWidget->AddToViewport();
@@ -30,7 +31,7 @@ void AMainHUD::BeginPlay()
 	IPlayerControllerInterface* PlayerController = Cast<IPlayerControllerInterface>(GetOwningPlayerController());
 	if (PlayerController)
 	{
-		PlayerController->InventoryActionDelegate.AddUObject(this, &AMainHUD::HandleInventory);
+		PlayerController->OpenInventoryActionDelegate.AddUObject(this, &AMainHUD::HandleInventory);
 	}
 }
 

@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Projectile.generated.h"
 
 UCLASS()
@@ -24,6 +25,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	USphereComponent* Collision;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UProjectileMovementComponent* ProjectileMovementComponent;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UParticleSystemComponent* ParticleSystemComponent;
@@ -44,7 +48,7 @@ protected:
 	float Damage;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(ExposeOnSpawn))
-	float Velocity;
+	float Speed;
 	
 public:	
 	// Called every frame

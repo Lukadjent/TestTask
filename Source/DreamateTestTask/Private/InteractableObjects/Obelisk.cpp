@@ -2,15 +2,26 @@
 
 
 #include "InteractableObjects/Obelisk.h"
-
-#include "GAS/DreamateTestTaskGameModeBase.h"
+#include "GameFramework/GameModeBase.h"
+#include "GameModeInterface.h"
 #include "Kismet/GameplayStatics.h"
 
-void AObelisk::OnInteraction(AGASBaseCharacter* Character)
+AObelisk::AObelisk()
 {
-	if (ADreamateTestTaskGameModeBase* Gamemode = Cast<ADreamateTestTaskGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
+	RootComponent = StaticMeshComponent;
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>("Collision");
+	BoxComponent->SetupAttachment(StaticMeshComponent);
+}
+
+UObject* AObelisk::OnInteraction()
+{
+	IGameModeInterface* GameMode = Cast<IGameModeInterface>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GameMode)
 	{
-		Gamemode->Victory();	
+		GameMode->Victory();	
 	}
+	
+	return nullptr;
 }
 

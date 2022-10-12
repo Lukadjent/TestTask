@@ -3,12 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PlayerControllerInterface.h"
+#include "Inventory/Item/ItemData.h"
 #include "UObject/Interface.h"
-#include "CharacterDeathHandleInterface.generated.h"
+#include "InteractionInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()
-class UCharacterDeathHandleInterface : public UInterface
+class UInteractionInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,15 +18,13 @@ class UCharacterDeathHandleInterface : public UInterface
 /**
  * 
  */
-class DREAMATETESTTASK_API ICharacterDeathHandleInterface
+class DREAMATETESTTASK_API IInteractionInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void OnPlayerCharacterDeath() = 0;
-
-	virtual void OnEnemyCharacterDeath() = 0;
-
-	virtual void AddToEnemyArray() = 0;
+	
+	virtual UObject* OnInteraction() = 0;
+	
 };

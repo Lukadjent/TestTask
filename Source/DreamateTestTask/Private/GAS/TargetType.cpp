@@ -5,19 +5,19 @@
 #include "GAS/Character/AI/GASBaseCharacter.h"
 #include "Kismet/KismetMathLibrary.h"
 
-void UTargetType::GetTargets_Implementation(AGASBaseCharacter* TargetingCharacter, AActor* TargetingActor,
+void UTargetType::GetTargets_Implementation(ACharacter* TargetingCharacter, AActor* TargetingActor,
                                             FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const
 {
 }
 
-void UTargetType_UseOwner::GetTargets_Implementation(AGASBaseCharacter* TargetingCharacter, AActor* TargetingActor,
-	FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const
+void UTargetType_UseOwner::GetTargets_Implementation(ACharacter* TargetingCharacter, AActor* TargetingActor,
+                                                     FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const
 {
 	OutActors.Add(TargetingCharacter);
 }
 
-void UTargetType_UseEventData::GetTargets_Implementation(AGASBaseCharacter* TargetingCharacter, AActor* TargetingActor,
-	FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const
+void UTargetType_UseEventData::GetTargets_Implementation(ACharacter* TargetingCharacter, AActor* TargetingActor,
+                                                         FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const
 {
 	const FHitResult* FoundHitResult = EventData.ContextHandle.GetHitResult();
 	if (FoundHitResult)
@@ -30,8 +30,8 @@ void UTargetType_UseEventData::GetTargets_Implementation(AGASBaseCharacter* Targ
 	}
 }
 
-void UTargetType_Sphere::GetTargets_Implementation(AGASBaseCharacter* TargetingCharacter, AActor* TargetingActor,
-	FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const
+void UTargetType_Sphere::GetTargets_Implementation(ACharacter* TargetingCharacter, AActor* TargetingActor,
+                                                   FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const
 {
 	const FVector TraceStart = UKismetMathLibrary::TransformLocation(TargetingCharacter->GetTransform(), OffsetFromActor);
 	const FVector TraceEnd = TargetingCharacter->GetActorForwardVector() * TraceLength + TargetingCharacter->GetActorLocation();

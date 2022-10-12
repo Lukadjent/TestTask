@@ -3,15 +3,16 @@
 #include "GAS/Character/Player/GASPlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "NetworkMessage.h"
+#include "ParticleHelper.h"
 #include "DreamateTestTask/Public/GAS/Character/AI/GASBaseCharacter.h"
-#include "DreamateTestTask/Public/GAS/Character/Player/GASMainCharacter.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "VectorTypes.h"
 #include "Camera/MovingCameraComponent.h"
 #include "GAS/AbilitySystemComponentInterface.h"
-#include "InteractableObjects/InteractableBase.h"
+#include "InteractableObjects/InteractionInterface.h"
+#include "Inventory/InventoryComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 void AGASPlayerController::BeginPlay()
@@ -34,7 +35,6 @@ void AGASPlayerController::BeginPlay()
 	CameraComponent = Camera->GetMovingCameraComponent();
 	SpringArmComponent = Camera->GetRotatingSpringArmComponent();
 	ASComponent = AbilitySystemComponent->GetAbilitySystemComponent();
-	
 }
 
 AGASPlayerController::AGASPlayerController()
@@ -60,7 +60,7 @@ void AGASPlayerController::SetupInputComponent()
 		if (IA_Movement)
 		{
 			EnhancedInputComponent->BindAction(IA_Movement, ETriggerEvent::Triggered, this,
-											   &AGASPlayerController::OnMovementAction);//OnMovementAction
+											   &AGASPlayerController::OnMovementAction);
 		}
 
 		if (IA_CameraMovement)
@@ -143,22 +143,14 @@ int32 AGASPlayerController::GetCombatMappingPriority() const
 	return CombatMappingPriority;
 }
 
-void AGASPlayerController::SetCanMove(bool bNewValue)
-{
-	bCanMove = bNewValue;
-}
-
 void AGASPlayerController::OnMovementAction()
 {
-	if (bCanMove)
-	{
-		//Finding A Point For Character To Go
-		FHitResult Result;
-		GetHitResultUnderCursor(ECC_Visibility, true, Result);
+	//Finding A Point For Character To Go
+	FHitResult Result;
+	GetHitResultUnderCursor(ECC_Visibility, true, Result);
 
-		//Character Moves To Location
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, Result.Location);
-	}
+	//Character Moves To Location
+	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, Result.Location);
 }
 
 void AGASPlayerController::OnCameraMovementAction(const FInputActionValue& Value)
@@ -184,10 +176,7 @@ void AGASPlayerController::OnDetachCameraAction()
 
 void AGASPlayerController::OnRotateCameraAction(const FInputActionValue& Value)
 {
-	if (CameraComponent->IsAttachedTo(SpringArmComponent))
-	{
-		SpringArmComponent->RotateCamera(Value);
-	}
+	SpringArmComponent->RotateCamera(Value);
 }
 
 void AGASPlayerController::OnAttackAction()
@@ -212,7 +201,7 @@ void AGASPlayerController::OnCastSpellAction()
 
 void AGASPlayerController::OnInventoryAction()
 {
-	InventoryActionDelegate.Broadcast();
+	OpenInventoryActionDelegate.Broadcast();
 }
 
 void AGASPlayerController::OnUseConsumableAction()
@@ -222,20 +211,37 @@ void AGASPlayerController::OnUseConsumableAction()
 
 void AGASPlayerController::OnInteractAction()
 {
-	/*TArray<AActor*> OverlappingActors;
-	const TSubclassOf<AInteractableBase> ClassFilter;
-	PlayerCharacter->GetOverlappingActors(OverlappingActors, ClassFilter);
+	TArray<AActor*> OverlappingActors;
+	const TSubclassOf<AActor> ClassFilter;
+	GetPawn()->GetOverlappingActors(OverlappingActors, ClassFilter);
 	for (AActor* OverlappingActor : OverlappingActors)
 	{
-		if (AInteractableBase* Interactable = Cast<AInteractableBase>(OverlappingActor))
+		if (IInteractionInterface* Interactable = Cast<IInteractionInterface>(OverlappingActor))
 		{
-			Interactable->OnInteraction(PlayerCharacter);
+			UObject* InteractedObject = Interactable->OnInteraction();
+			if (InteractedObject)
+			{
+				HandleInteractedObject(InteractedObject);
+			}
 			break;
 		}
-	}*/
+	}
 }
 
 FGenericTeamId AGASPlayerController::GetGenericTeamId() const
 {
 	return CharacterTeamID;
+}
+
+void AGASPlayerController::HandleInteractedObject(UObject* InteractedObject) const
+{
+	UItemData* ItemData = Cast<UItemData>(InteractedObject);
+	if (ItemData)
+	{
+		IInventoryInterface* Inventory = Cast<IInventoryInterface>(GetPawn());
+		if (Inventory)
+		{
+			Inventory->GetInventoryComponent()->AddInventoryItem(ItemData);
+		}
+	}
 }

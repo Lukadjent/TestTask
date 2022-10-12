@@ -2,7 +2,7 @@
 
 #include "GAS/Character/AI/GASBaseEnemy.h"
 
-#include "CharacterDeathHandleInterface.h"
+#include "GameModeInterface.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/GameMode.h"
 #include "GameFramework/GameModeBase.h"
@@ -19,11 +19,11 @@ AGASBaseEnemy::AGASBaseEnemy()
 void AGASBaseEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	ICharacterDeathHandleInterface* CharacterDeathHandleInterface = Cast<ICharacterDeathHandleInterface>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (CharacterDeathHandleInterface)
+	IGameModeInterface* GameModeInterface = Cast<IGameModeInterface>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GameModeInterface)
 	{
-		CharacterDeathHandleInterface->AddToEnemyArray();
-		CharacterDeath.AddRaw(CharacterDeathHandleInterface, &ICharacterDeathHandleInterface::OnEnemyCharacterDeath);
+		GameModeInterface->AddToEnemyArray();
+		CharacterDeath.AddRaw(GameModeInterface, &IGameModeInterface::OnEnemyCharacterDeath);
 		CharacterDeath.AddUObject(this, &AGASBaseEnemy::OnDeath);
 	}
 }

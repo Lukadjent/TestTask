@@ -25,23 +25,6 @@ class DREAMATETESTTASK_API AGASBaseEnemy : public ADummy
 
 protected:
 
-#pragma region UI
-	
-	/*UPROPERTY()
-	UFloatingBarWidget* FloatingBarWidget;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "UI|Bar")
-	TSubclassOf<UFloatingBarWidget> FloatingBarClass;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "UI")
-	UWidgetComponent* WidgetComponent;
-
-	FDelegateHandle HealthChangedDelegateHandle;
-
-	void HealthChanged(const FOnAttributeChangeData& Data);*/
-
-#pragma endregion
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Drop")
 	TArray<TSubclassOf<APickUpBase>> Drop;
 
@@ -53,7 +36,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI | Patroling")
 	TArray<ATargetPoint*> PatrolPoints;
 
-	//Override of function that reacts on Immobile tag added/removed
+	//Override of the function that reacts on Immobile tag added/removed
 	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
 
 	void OnDeath();

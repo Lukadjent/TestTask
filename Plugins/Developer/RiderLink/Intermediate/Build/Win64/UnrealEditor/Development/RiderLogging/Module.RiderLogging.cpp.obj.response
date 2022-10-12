@@ -1,39 +1,39 @@
-D:\Work\TestTask\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\Module.RiderLogging.cpp
+D:\Work\Dreamate\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\Module.RiderLogging.cpp
 /I .
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RiderLogging\Private
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RiderLogging\Private
 /I Runtime
 /I Runtime\TraceLog\Public
 /I Runtime\Core\Public
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\src
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_core_cpp
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_core_cpp\src\main
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp\src\main
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp\src\main\util
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\src\rd_gen_cpp\src
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\ordered-map\include
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\optional\tl
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\variant\include
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\string-view-lite\include
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\spdlog\include
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\clsocket\src
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RD\thirdparty\CTPL\include
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RiderLink\Public\Model\Library
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RiderLink\Public\Model\RdEditorProtocol
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RiderLink\Public
-/I D:\Work\TestTask\Plugins\Developer\RiderLink\Source\RiderBlueprint\Public
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\src
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_core_cpp
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_core_cpp\src\main
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp\src\main
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_framework_cpp\src\main\util
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\src\rd_gen_cpp\src
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\ordered-map\include
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\optional\tl
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\variant\include
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\string-view-lite\include
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\spdlog\include
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\clsocket\src
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RD\thirdparty\CTPL\include
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RiderLink\Public\Model\Library
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RiderLink\Public\Model\RdEditorProtocol
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RiderLink\Public
+/I D:\Work\Dreamate\Plugins\Developer\RiderLink\Source\RiderBlueprint\Public
 /I ThirdParty\mimalloc\include
-/I D:\Work\VS\VC\Tools\MSVC\14.29.30133\INCLUDE
+/I "D:\Work\Visual Studio\VC\Tools\MSVC\14.29.30133\INCLUDE"
 /I "C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"
-/FI"D:\Work\TestTask\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\Definitions.h"
-/Fo"D:\Work\TestTask\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\Module.RiderLogging.cpp.obj"
-/sourceDependencies D:\Work\TestTask\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\Module.RiderLogging.cpp.json
+/FI"D:\Work\Dreamate\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\Definitions.h"
+/Fo"D:\Work\Dreamate\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\Module.RiderLogging.cpp.obj"
+/sourceDependencies D:\Work\Dreamate\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\Module.RiderLogging.cpp.json
 /Zc:inline
 /nologo
 /Oi

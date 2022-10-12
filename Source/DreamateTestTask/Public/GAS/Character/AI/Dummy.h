@@ -31,7 +31,5 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "UI")
 	UWidgetComponent* WidgetComponent;
 
-	FDelegateHandle HealthChangedDelegateHandle;
-
-	void HealthChanged(const FOnAttributeChangeData& Data);
+	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
 };

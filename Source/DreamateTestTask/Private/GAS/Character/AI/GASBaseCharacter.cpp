@@ -2,6 +2,8 @@
 
 
 #include "GAS/Character/AI/GASBaseCharacter.h"
+
+#include "Components/CapsuleComponent.h"
 #include "Inventory/InventoryComponent.h"
 #include "DreamateTestTask/Public/Inventory/Weapon/Weapon.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -17,18 +19,14 @@ AGASBaseCharacter::AGASBaseCharacter()
 	WeaponComponent = CreateDefaultSubobject<UChildActorComponent>("WeaponComponent");
 	WeaponComponent->SetupAttachment(GetMesh(), "Weapon_r");
 	Inventory = CreateDefaultSubobject<UInventoryComponent>("Inventory");
-}
-
-UChildActorComponent* AGASBaseCharacter::GetWeaponComponent() const
-{
-	return WeaponComponent;
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 }
 
 // Called when the game starts or when spawned
 void AGASBaseCharacter::BeginPlay()
 {
 	Inventory->OnSlottedItemChangedNative.AddUObject(this, &AGASBaseCharacter::SlottedItemChanged);
-	
 	Super::BeginPlay();
 	
 	//Binding function on MoveSpeedChange
@@ -37,7 +35,6 @@ void AGASBaseCharacter::BeginPlay()
 	//Binding function on Immobile tag added/removed
 	AbilitySystemComponent->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag(FName("Status.Immobile")),
 	                                                 EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AGASBaseCharacter::ImmobileTagChanged);
-	
 }
 
 void AGASBaseCharacter::InitializeDefaultAttributesAndEffects()
@@ -55,23 +52,9 @@ void AGASBaseCharacter::InitializeDefaultAttributesAndEffects()
 	}
 }
 
-UASComponent* AGASBaseCharacter::GetAbilitySystemComponent() const 
-{
-	return AbilitySystemComponent;
-}
-
-UInventoryComponent* AGASBaseCharacter::GetInventoryComponent() const
-{
-	return Inventory;
-}
-
 void AGASBaseCharacter::OnMovementSpeedChange(const FOnAttributeChangeData& Data)
 {
 	GetCharacterMovement()->MaxWalkSpeed = AttributeSet->GetMoveSpeed();
-}
-
-void AGASBaseCharacter::ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
-{
 }
 
 void AGASBaseCharacter::NotifyDeath()
@@ -91,3 +74,20 @@ void AGASBaseCharacter::SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item)
 	AbilitySystemComponent->RemoveSlottedGameplayAbilities(ItemSlot);
 	AbilitySystemComponent->AddSlottedGameplayAbilities();
 }
+
+#pragma region GETTERS
+UChildActorComponent* AGASBaseCharacter::GetWeaponComponent() const
+{
+	return WeaponComponent;
+}
+
+UASComponent* AGASBaseCharacter::GetAbilitySystemComponent() const 
+{
+	return AbilitySystemComponent;
+}
+
+UInventoryComponent* AGASBaseCharacter::GetInventoryComponent() const
+{
+	return Inventory;
+}
+#pragma endregion 

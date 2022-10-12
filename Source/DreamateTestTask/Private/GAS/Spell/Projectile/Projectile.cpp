@@ -15,13 +15,21 @@ AProjectile::AProjectile()
 	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>("StaticMesh");
 	RootComponent = Collision;
 	ParticleSystemComponent->SetupAttachment(Collision);
+	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComponent");
+	ProjectileMovementComponent->SetUpdatedComponent(Collision);
+	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
 }
 
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	ProjectileMovementComponent->InitialSpeed = Speed;
+	ProjectileMovementComponent->MaxSpeed = Speed;
+	if (GetInstigator())
+	{
+		ProjectileMovementComponent->Velocity = GetInstigator()->GetActorForwardVector() * ProjectileMovementComponent->InitialSpeed;
+	}
 }
 
 // Called every frame

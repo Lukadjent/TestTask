@@ -17,38 +17,21 @@ UCLASS()
 class DREAMATETESTTASK_API AFireball : public AProjectile
 {
 	GENERATED_BODY()
-
+	
 	virtual void BeginPlay() override;
 
-	virtual void Tick(float DeltaSeconds) override;
-	
-	UFUNCTION()
-	void Update(float Alpha);
-
-	UFUNCTION()
-	void Finished();
 	
 protected:
-
-	FTimeline FloatCurveTimeline;
-
-	UPROPERTY(EditAnywhere, Category = "Timeline")
-	UCurveFloat* TimelineCurve;
-
-	FVector SpawnLocation;
 
 	UPROPERTY(EditAnywhere, Category = "Particle")
 	UParticleSystem* Explosion;
 
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	USoundBase* ExplosionSound;
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(ExposeOnSpawn))
-	FVector Destination;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(ExposeOnSpawn))
 	float ExplosionRadius;
 
 	UFUNCTION()
-	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& HitResult);
 };

@@ -35,6 +35,7 @@ protected:
 
 	UPROPERTY()
 	UMovingCameraComponent* CameraComponent;
+
 	UPROPERTY()
 	URotatingSpringArmComponent* SpringArmComponent;
 
@@ -106,9 +107,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
 	TSubclassOf<UUserWidget> InventoryWidgetClass;
 
-	UPROPERTY()
-	bool bIsInventoryOpened = false;
-
 #pragma endregion 
 
 #pragma  region GENERICTEAMINTERFACE
@@ -119,18 +117,19 @@ protected:
 
 #pragma endregion
 
+	void HandleInteractedObject(UObject* InteractedObject) const;
+	
 	UPROPERTY()
 	UASComponent* ASComponent;
-	
-	bool bCanMove = true;
-	
+
 public:
 	
 	UInputMappingContext* GetControlMappingContext() const;
+
 	int32 GetControlsMappingPriority() const;
+
 	UInputMappingContext* GetCombatMappingContext() const;
+
 	int32 GetCombatMappingPriority() const;
-	void SetCanMove(bool bNewValue);
-	
 };
 

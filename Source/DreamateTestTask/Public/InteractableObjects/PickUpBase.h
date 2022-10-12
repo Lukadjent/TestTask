@@ -3,15 +3,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InteractableBase.h"
+#include "InteractionInterface.h"
+#include "Components/BoxComponent.h"
 #include "Inventory/Item/ItemData.h"
 #include "PickUpBase.generated.h"
 
 UCLASS()
-class DREAMATETESTTASK_API APickUpBase : public AInteractableBase
+class DREAMATETESTTASK_API APickUpBase : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "StaticMeshComponent", meta = (AllowPrivateAccess))
+	UStaticMeshComponent* StaticMeshComponent;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "BoxComponent", meta = (AllowPrivateAccess))
+	UBoxComponent* BoxComponent;
+	
 public:
 	// Sets default values for this actor's properties
 	APickUpBase();
@@ -26,5 +33,6 @@ protected:
 	
 public:
 
-	virtual void OnInteraction(AGASBaseCharacter* Character) override;
+	//virtual void OnInteraction(AGASBaseCharacter* Character) override;
+	virtual UObject* OnInteraction() override;
 };

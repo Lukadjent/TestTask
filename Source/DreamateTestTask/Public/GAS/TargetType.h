@@ -19,7 +19,7 @@ public:
 	UTargetType() {}
 
 	UFUNCTION(BlueprintNativeEvent)
-	void GetTargets(AGASBaseCharacter* TargetingCharacter, AActor* TargetingActor, FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const;
+	void GetTargets(ACharacter* TargetingCharacter, AActor* TargetingActor, FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const;
 };
 
 UCLASS(NotBlueprintable)
@@ -29,7 +29,7 @@ class DREAMATETESTTASK_API UTargetType_UseOwner : public UTargetType
 public:
 	UTargetType_UseOwner() {}
 
-	virtual void GetTargets_Implementation(AGASBaseCharacter* TargetingCharacter, AActor* TargetingActor, FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const override;
+	virtual void GetTargets_Implementation(ACharacter* TargetingCharacter, AActor* TargetingActor, FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const override;
 	
 };
 
@@ -40,7 +40,7 @@ class DREAMATETESTTASK_API UTargetType_UseEventData : public UTargetType
 public:
 	UTargetType_UseEventData() {}
 
-	virtual void GetTargets_Implementation(AGASBaseCharacter* TargetingCharacter, AActor* TargetingActor, FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const override;
+	virtual void GetTargets_Implementation(ACharacter* TargetingCharacter, AActor* TargetingActor, FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const override;
 	
 };
 
@@ -66,5 +66,5 @@ protected:
 public:
 	UTargetType_Sphere() {}
 
-	virtual void GetTargets_Implementation(AGASBaseCharacter* TargetingCharacter, AActor* TargetingActor, FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const override;
+	virtual void GetTargets_Implementation(ACharacter* TargetingCharacter, AActor* TargetingActor, FGameplayEventData EventData, TArray<FHitResult>& OutHitResults, TArray<AActor*>& OutActors) const override;
 };

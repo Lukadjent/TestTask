@@ -8,7 +8,7 @@
 
 class UInventoryComponent;
 // This class does not need to be modified.
-UINTERFACE()
+UINTERFACE(meta =(CannotImplementInterfaceInBlueprint))
 class UInventoryInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -23,5 +23,8 @@ class DREAMATETESTTASK_API IInventoryInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+
+	UFUNCTION(BlueprintCallable)
 	virtual UInventoryComponent* GetInventoryComponent() const = 0;
+	
 };

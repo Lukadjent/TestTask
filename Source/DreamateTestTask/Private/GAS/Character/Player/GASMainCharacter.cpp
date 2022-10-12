@@ -3,7 +3,7 @@
 
 #include "GAS/Character/Player/GASMainCharacter.h"
 
-#include "CharacterDeathHandleInterface.h"
+#include "GameModeInterface.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/Character/Player/GASPlayerController.h"
@@ -34,19 +34,17 @@ void AGASMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 		
-	ICharacterDeathHandleInterface* CharacterDeathHandleInterface = Cast<ICharacterDeathHandleInterface>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (CharacterDeathHandleInterface)
+	IGameModeInterface* GameModeInterface = Cast<IGameModeInterface>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GameModeInterface)
 	{
-		CharacterDeath.AddRaw(CharacterDeathHandleInterface, &ICharacterDeathHandleInterface::OnPlayerCharacterDeath);
+		CharacterDeath.AddRaw(GameModeInterface, &IGameModeInterface::OnPlayerCharacterDeath);
 	}
 	
 	if (AbilitySystemComponent)
 	{
-		MaxHealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxHealthAttribute()).AddUObject(this, &AGASMainCharacter::MaxHealthChanged);
-		MaxManaChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxManaAttribute()).AddUObject(this, &AGASMainCharacter::MaxManaChanged);
-		MaxStaminaChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxStaminaAttribute()).AddUObject(this, &AGASMainCharacter::MaxStaminaChanged);
+		AbilitySystemComponent->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag(FName("Status.LoseControl")),
+													 EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AGASMainCharacter::LoseControlTagChanged);
 	}
-	
 	InitializeDefaultAttributesAndEffects();
 }
 
@@ -70,62 +68,32 @@ void AGASMainCharacter::PawnClientRestart()
 
 void AGASMainCharacter::ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
-	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
+	if (NewCount > 0)
 	{
-		const bool bCanMove = NewCount > 0 ? false : true;
-		PlayerController->SetCanMove(bCanMove);
-		if (!bCanMove)
-		{
-			GetMovementComponent()->StopMovementImmediately();
-		}
+		GetMovementComponent()->StopMovementImmediately();
+		GetMovementComponent()->Deactivate();
+	}
+	else
+	{
+		GetMovementComponent()->Activate();
 	}
 }
 
-void AGASMainCharacter::MaxHealthChanged(const FOnAttributeChangeData& Data)
+void AGASMainCharacter::LoseControlTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
-	float MaxHealth = Data.NewValue;
-	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (!PlayerController)
 	{
-		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
-		{
-			HUD->MainHUDWidget->SetMaxHealth(MaxHealth);
-		}
+		return;
 	}
-}
-
-void AGASMainCharacter::MaxManaChanged(const FOnAttributeChangeData& Data)
-{
-	float MaxMana = Data.NewValue;
-	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
+	if (NewCount > 0)
 	{
-		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
-		{
-			HUD->MainHUDWidget->SetMaxMana(MaxMana);
-		}
-	}	
-}
-
-void AGASMainCharacter::MaxStaminaChanged(const FOnAttributeChangeData& Data)
-{
-	float MaxStamina = Data.NewValue;
-	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
-	{
-		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
-		{
-			HUD->MainHUDWidget->SetMaxStamina(MaxStamina);
-		}
+		PlayerController->StopMovement();
+		DisableInput(PlayerController);
 	}
-}
-
-void AGASMainCharacter::StaminaRegenRateChanged(const FOnAttributeChangeData& Data)
-{
-	float StaminaRegenRate = Data.NewValue;
-	if (AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
+	else
 	{
-		if (AMainHUD* HUD = Cast<AMainHUD>(PlayerController->GetHUD()))
-		{
-			HUD->MainHUDWidget->SetStaminaRegenRate(StaminaRegenRate);
-		}
+		EnableInput(PlayerController);
 	}
 }
 

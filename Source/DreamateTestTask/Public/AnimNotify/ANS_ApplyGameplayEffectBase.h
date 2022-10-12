@@ -21,7 +21,7 @@ class DREAMATETESTTASK_API UANS_ApplyGameplayEffectBase : public UAnimNotifyStat
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
 
 	UPROPERTY()
-	AGASBaseCharacter* Character;
+	UAbilitySystemComponent* AbilitySystemComponent;
 	
 protected:
 	

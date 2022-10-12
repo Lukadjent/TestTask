@@ -56,11 +56,6 @@ ETeamAttitude::Type AGASAIController::GetTeamAttitudeTowards(const AActor& Other
 	return ETeamAttitude::Neutral;
 }
 
-ETeamAttitude::Type AGASAIController::GetAttitudeTowards(const AActor* Other) const
-{
-	return GetTeamAttitudeTowards(*Other);
-}
-
 void AGASAIController::ActorsPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 {
 	if (UpdatedActors[0]->IsA(AGASMainCharacter::StaticClass()))

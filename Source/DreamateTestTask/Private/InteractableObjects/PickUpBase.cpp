@@ -9,12 +9,14 @@
 // Sets default values
 APickUpBase::APickUpBase()
 {
-
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
+	RootComponent = StaticMeshComponent;
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>("Collision");
+	BoxComponent->SetupAttachment(StaticMeshComponent);
 }
 
-void APickUpBase::OnInteraction(AGASBaseCharacter* Character)
+UObject* APickUpBase::OnInteraction()
 {
-	Character->GetInventoryComponent()->AddInventoryItem(Item, Amount);
 	Destroy();
+	return Item;
 }
-

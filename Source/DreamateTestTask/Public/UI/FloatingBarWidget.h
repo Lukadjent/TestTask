@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AttributesWidgetInterface.h"
 #include "Blueprint/UserWidget.h"
 #include "FloatingBarWidget.generated.h"
 
@@ -10,15 +11,12 @@
  * 
  */
 UCLASS()
-class DREAMATETESTTASK_API UFloatingBarWidget : public UUserWidget
+class DREAMATETESTTASK_API UFloatingBarWidget : public UUserWidget, public IAttributesWidgetInterface
 {
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetCurrentHealth(float CurrentHealth);
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetMaxHealth(float MaxHealth);
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetHealthPercantage(float HealthPercentage);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void UpdateColor(FLinearColor Color);
 };

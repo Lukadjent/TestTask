@@ -35,18 +35,10 @@ protected:
 	float SpringArmLength = 1000.f;
 	
 #pragma endregion
-	
-	FDelegateHandle MaxHealthChangedDelegateHandle;
-	FDelegateHandle MaxManaChangedDelegateHandle;
-	FDelegateHandle MaxStaminaChangedDelegateHandle;
-	FDelegateHandle StaminaRegenRateChangedDelegateHandle;
 
 public:
-	
-	virtual void MaxHealthChanged(const FOnAttributeChangeData& Data);
-	virtual void MaxManaChanged(const FOnAttributeChangeData& Data);
-	virtual void MaxStaminaChanged(const FOnAttributeChangeData& Data);
-	virtual void StaminaRegenRateChanged(const FOnAttributeChangeData& Data);
+
+	void LoseControlTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 
 	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
 	float GetHealth() const;

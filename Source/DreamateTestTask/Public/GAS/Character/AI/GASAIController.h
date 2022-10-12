@@ -71,9 +71,6 @@ protected:
 
 public:
 	
-	UFUNCTION(BlueprintCallable)
-	ETeamAttitude::Type GetAttitudeTowards(const AActor* Other) const;
-
 	virtual FGenericTeamId GetGenericTeamId() const override;
 
 	UBlackboardComponent* GetBlackBoardComponent() const;

@@ -5,19 +5,23 @@
 
 void UANS_ApplyGameplayEffectBase::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
-	Character = Cast<AGASBaseCharacter>(MeshComp->GetOwner());
-	if (Character)
+	IAbilitySystemComponentInterface* ASCInterface = Cast<IAbilitySystemComponentInterface>(MeshComp->GetOwner());
+	if (ASCInterface)
 	{
-		const FGameplayEffectContextHandle GameplayEffectContext = Character->GetAbilitySystemComponent()->MakeEffectContext();
-		const FGameplayEffectSpecHandle SpecHandle = Character->GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffect, 1, GameplayEffectContext);
-		Character->GetAbilitySystemComponent()->BP_ApplyGameplayEffectSpecToSelf(SpecHandle);
+		AbilitySystemComponent = ASCInterface->GetAbilitySystemComponent();
+		if (AbilitySystemComponent)
+		{
+			const FGameplayEffectContextHandle GameplayEffectContext = AbilitySystemComponent->MakeEffectContext();
+			const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, 1, GameplayEffectContext);
+			AbilitySystemComponent->BP_ApplyGameplayEffectSpecToSelf(SpecHandle);
+		}
 	}
 }
 
 void UANS_ApplyGameplayEffectBase::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-	if (Character)
+	if (AbilitySystemComponent)
 	{
-		Character->GetAbilitySystemComponent()->RemoveActiveGameplayEffectBySourceEffect(GameplayEffect, nullptr);
+	AbilitySystemComponent->RemoveActiveGameplayEffectBySourceEffect(GameplayEffect, nullptr);
 	}
 }

@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "Enum/EAbilities.h"
 #include "Inventory/InventoryTypes.h"
+#include "UI/AttributesWidgetInterface.h"
 #include "ASComponent.generated.h"
 
 
@@ -51,5 +52,7 @@ public:
 	
 	UFUNCTION()
 	void FillSlottedAbilitySpecs(TMap<FItemSlot, FGameplayAbilitySpec>& SlottedAbilitySpecs);
+
+	void BindAttributeToWidget(FGameplayAttribute Attribute, FGameplayAttribute AttributeMax, TScriptInterface<IAttributesWidgetInterface> Widget) const;
 	
 };

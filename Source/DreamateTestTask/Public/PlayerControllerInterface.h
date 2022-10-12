@@ -24,6 +24,6 @@ class DREAMATETESTTASK_API IPlayerControllerInterface
 public:
 
 	DECLARE_MULTICAST_DELEGATE(FOnInventoryAction)
-	FOnInventoryAction InventoryActionDelegate;
+	FOnInventoryAction OpenInventoryActionDelegate;
 	
 };

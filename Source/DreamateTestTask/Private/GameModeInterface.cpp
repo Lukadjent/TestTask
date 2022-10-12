@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterDeathHandleInterface.h"
+#include "GameModeInterface.h"
 
 
 // Add default functionality here for any ICharacterDeathHandleInterface functions that are not pure virtual.

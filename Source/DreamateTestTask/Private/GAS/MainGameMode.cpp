@@ -21,3 +21,13 @@ void AMainGameMode::AddToEnemyArray()
 {
 	++EnemyCounter;
 }
+
+void AMainGameMode::Victory() const
+{
+	OnVictory.Broadcast();
+}
+
+void AMainGameMode::Lose() const
+{
+	OnLose.Broadcast();
+}

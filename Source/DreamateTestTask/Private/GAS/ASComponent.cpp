@@ -40,7 +40,7 @@ bool UASComponent::Parry()
 {
 	if (!DefaultAbilities[EAbilities::Parry])
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UASComponent: Roll Ability Isn't Given"));
+		UE_LOG(LogTemp, Warning, TEXT("UASComponent: Parry Ability Isn't Given"));
 		return false;
 	}
 	return TryActivateAbilityByClass(DefaultAbilities[EAbilities::Parry]);
@@ -50,7 +50,7 @@ bool UASComponent::CastSpell()
 {
 	if (!DefaultAbilities[EAbilities::CastSpell])
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UASComponent: Roll Ability Isn't Given"));
+		UE_LOG(LogTemp, Warning, TEXT("UASComponent: CastSpell Ability Isn't Given"));
 		return false;
 	}
 	return TryActivateAbilityByClass(DefaultAbilities[EAbilities::CastSpell]);
@@ -118,4 +118,11 @@ void UASComponent::FillSlottedAbilitySpecs(TMap<FItemSlot, FGameplayAbilitySpec>
 			}
 		}
 	}
+}
+
+void UASComponent::BindAttributeToWidget(FGameplayAttribute Attribute, FGameplayAttribute AttributeMax, TScriptInterface<IAttributesWidgetInterface> Widget) const
+{
+	IAttributesWidgetInterface::Execute_SetAttribute(Widget.GetObject(), Attribute);
+	IAttributesWidgetInterface::Execute_SetAttributeMax(Widget.GetObject(), AttributeMax);
+	IAttributesWidgetInterface::Execute_SetAbilitySystemComponent(Widget.GetObject(), this);
 }

@@ -7,51 +7,46 @@
 #include "NativeGameplayTags.h"
 #include "Chaos/CollisionResolution.h"
 #include "Kismet/GameplayStatics.h"
-#include "MaterialEditor/Public/MaterialStatsCommon.h"
 
 // Create components
 AWeapon::AWeapon()
 {
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
 	RootComponent = StaticMeshComponent;
+	StaticMeshComponent->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	BoxCollisionComponent = CreateDefaultSubobject<UBoxComponent>("BoxComponent");
 	BoxCollisionComponent->SetupAttachment(StaticMeshComponent);
 	BoxCollisionComponent->SetGenerateOverlapEvents(false);
 	BoxCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::OnOverlapBegin);
+	BoxCollisionComponent->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 }
 
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-
-	OwningPawn = Cast<AGASBaseCharacter>(GetParentActor());
 	
-}
+	Owner = GetParentActor();
 
-void AWeapon::ClearAttackCounter()
-{
-	AttackCounter = 0;
-}
+	if (!Owner)
+	{
+		UE_LOG(LogTemp, Error, TEXT("AWeapon: Failed To Initialize OWNER in AWeapon.cpp!"));
+		return;
+	}
 
-void AWeapon::OnAttack()
-{
-	GetWorldTimerManager().ClearTimer(ClearAttackCounterTimerHandle);
-	AttackCounter = (AttackCounter + 1) % AttacksInCombo;
-	GetWorldTimerManager().SetTimer(ClearAttackCounterTimerHandle, this, &AWeapon::ClearAttackCounter, 1.f, false, ComboTime);
 }
 
 void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor && OtherActor != OwningPawn)
+	if (OtherActor && OtherActor != Owner)
 	{
 		if (!HitActors.Contains(OtherActor))
 		{
 			HitActors.Add(OtherActor);
 			FGameplayEventData Data;
-			Data.Instigator = OwningPawn;
+			Data.Instigator = Owner;
 			Data.Target = OtherActor;
-			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwningPawn, Hit, Data);
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Owner, Hit, Data);
 		}
 	}
 }

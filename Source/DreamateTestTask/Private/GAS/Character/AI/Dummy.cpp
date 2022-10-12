@@ -12,37 +12,30 @@ ADummy::ADummy()
 	WidgetComponent->SetDrawSize(FVector2d(500, 500));
 }
 
-//ÐÅÞÇ ÂÈÄÆÅÒÀ ÂÍÅ DUMMY
-
 void ADummy::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//Bind function on health attribute changed
-	HealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &ADummy::HealthChanged);
 	
 	InitializeDefaultAttributesAndEffects();
-
+	
 	FloatingBarWidget = CreateWidget<UFloatingBarWidget>(GetWorld(), FloatingBarClass);
 	
 	if (FloatingBarWidget && WidgetComponent)
 	{
-		WidgetComponent->SetWidget(FloatingBarWidget);
-
+		FloatingBarWidget->UpdateColor(FLinearColor(1.f, 0.f,0.f,1.f));
+		
 		if (AttributeSet)
 		{
-			FloatingBarWidget->SetCurrentHealth(AttributeSet->GetHealth());
-			FloatingBarWidget->SetMaxHealth(AttributeSet->GetMaxHealth());
+			AbilitySystemComponent->BindAttributeToWidget(AttributeSet->GetHealthAttribute(),
+			                                              AttributeSet->GetMaxHealthAttribute(), FloatingBarWidget);
 		}
+
+		WidgetComponent->SetWidget(FloatingBarWidget);
 	}
 }
 
-void ADummy::HealthChanged(const FOnAttributeChangeData& Data)
+void ADummy::ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
-	float Health = Data.NewValue;
-	if (FloatingBarWidget)
-	{
-		FloatingBarWidget->SetCurrentHealth(Health);
-	}
+	
 }
 

@@ -54,7 +54,7 @@ protected:
 	void OnMovementSpeedChange(const FOnAttributeChangeData& Data);
 
 	//On add or remove immobile tag
-	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
+	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) PURE_VIRTUAL(AGASBaseCharacter::ImmobileTagChanged, );
 
 	void SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item);
 
