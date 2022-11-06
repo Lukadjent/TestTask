@@ -2,6 +2,8 @@
 
 
 #include "GAS/Calculation/MMC_BaseActionCost.h"
+
+#include "DreamateBlueprintFunctionLibrary.h"
 #include "GAS/AttributeSet/BaseAttributeSet.h"
 #include "GAS/Character/Player/GASMainCharacter.h"
 
@@ -24,7 +26,9 @@ float UMMC_BaseActionCost::CalculateBaseMagnitude_Implementation(const FGameplay
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
 
-	if (Spec.GetContext().GetInstigator()->IsA(AGASMainCharacter::StaticClass()))
+	const APlayerController* PC = UDreamateBlueprintFunctionLibrary::GetPlayerController(Spec.GetContext().GetInstigator());
+	
+	if (PC)
 	{
 		float StaminaValue = 0.f;
 		GetCapturedAttributeMagnitude(Stamina, Spec, EvaluationParameters, StaminaValue);

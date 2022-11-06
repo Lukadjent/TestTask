@@ -27,7 +27,7 @@ void ADummy::BeginPlay()
 		if (AttributeSet)
 		{
 			AbilitySystemComponent->BindAttributeToWidget(AttributeSet->GetHealthAttribute(),
-			                                              AttributeSet->GetMaxHealthAttribute(), FloatingBarWidget);
+			                                              AttributeSet->GetMaxHealthAttribute(), FloatingBarWidget.Get());
 		}
 
 		WidgetComponent->SetWidget(FloatingBarWidget);

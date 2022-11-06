@@ -29,22 +29,22 @@ protected:
 	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI | Behaviour")
-	UBehaviorTreeComponent* BehaviorTreeComponent;
+	TObjectPtr<UBehaviorTreeComponent> BehaviorTreeComponent;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI | Behaviour")
-	UBlackboardComponent* BlackboardComponent;
+	TObjectPtr<UBlackboardComponent> BlackboardComponent;
 	
 #pragma endregion
 	
 #pragma region PERCEPTION
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI | Perception")
-	UAIPerceptionComponent* AIPerceptionComponent;
+	TObjectPtr<UAIPerceptionComponent> AIPerceptionComponent;
 
 	virtual void ActorsPerceptionUpdated(const TArray<AActor*>& UpdatedActors) override;
 
 	UPROPERTY()
-	UAISenseConfig_Sight* SightConfig;
+	TObjectPtr<UAISenseConfig_Sight> SightConfig;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI | Perception")
 	float SightRange = 1000.f;

@@ -7,10 +7,6 @@
 #include "GAS/Spell/Projectile/Projectile.h"
 #include "Fireball.generated.h"
 
-/**
- * 
- */
-
 class UCurveFloat;
 
 UCLASS()
@@ -27,11 +23,13 @@ protected:
 	UParticleSystem* Explosion;
 
 	UPROPERTY(EditAnywhere, Category = "Sound")
-	USoundBase* ExplosionSound;
+	TSoftObjectPtr<USoundBase> ExplosionSound;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(ExposeOnSpawn))
 	float ExplosionRadius;
 
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& HitResult);
+
+	void Explode();
 };

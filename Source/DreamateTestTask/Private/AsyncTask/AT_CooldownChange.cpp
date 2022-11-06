@@ -31,7 +31,7 @@ UAT_CooldownChange* UAT_CooldownChange::ListenForCooldownChange(UAbilitySystemCo
 
 void UAT_CooldownChange::EndTask()
 {
-	if (IsValid(ASC))
+	if (IsValid(ASC.Get()))
 	{
 		ASC->OnActiveGameplayEffectAddedDelegateToSelf.RemoveAll(this);
 		TArray<FGameplayTag> CooldownTagArray;
@@ -81,7 +81,7 @@ void UAT_CooldownChange::CooldownTagChanged(const FGameplayTag CooldownTag, int3
 bool UAT_CooldownChange::GetCooldwonRemainingForTag(FGameplayTagContainer InCooldownTags, float& TimeRemaining,
 	float& CooldownDuration)
 {
-	if (IsValid(ASC) && InCooldownTags.Num() > 0)
+	if (IsValid(ASC.Get()) && InCooldownTags.Num() > 0)
 	{
 		TimeRemaining = 0.f;
 		CooldownDuration = 0.f;

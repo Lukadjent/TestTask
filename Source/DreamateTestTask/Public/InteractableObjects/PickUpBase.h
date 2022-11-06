@@ -14,10 +14,10 @@ class DREAMATETESTTASK_API APickUpBase : public AActor, public IInteractionInter
 	GENERATED_BODY()
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "StaticMeshComponent", meta = (AllowPrivateAccess))
-	UStaticMeshComponent* StaticMeshComponent;
+	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "BoxComponent", meta = (AllowPrivateAccess))
-	UBoxComponent* BoxComponent;
+	TObjectPtr<UBoxComponent> BoxComponent;
 	
 public:
 	// Sets default values for this actor's properties
@@ -26,7 +26,7 @@ public:
 protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Item")
-	UItemData* Item;
+	TSoftObjectPtr<UItemData> Item;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Item")
 	int32 Amount = 1;

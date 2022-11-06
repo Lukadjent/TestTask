@@ -18,5 +18,5 @@ APickUpBase::APickUpBase()
 UObject* APickUpBase::OnInteraction()
 {
 	Destroy();
-	return Item;
+	return Item.Get();
 }

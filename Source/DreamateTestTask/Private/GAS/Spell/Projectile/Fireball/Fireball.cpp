@@ -24,10 +24,14 @@ void AFireball::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPr
 	}
 	if (ExplosionSound)
 	{
-		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation());
+		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ExplosionSound.Get(), GetActorLocation());
 	}
-	
-	//Finding Actors In Explosion Area.
+	Explode();
+}
+
+void AFireball::Explode()
+{
+//Finding Actors In Explosion Area.
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectType;
 	ObjectType.Init(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn), 1);
 	UClass* SearchForClass = nullptr;

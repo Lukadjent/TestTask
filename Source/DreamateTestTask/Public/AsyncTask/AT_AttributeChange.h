@@ -32,7 +32,7 @@ class DREAMATETESTTASK_API UAT_AttributeChange : public UBlueprintAsyncActionBas
     protected:
     
     UPROPERTY()
-    UAbilitySystemComponent* ASC;
+   TSoftObjectPtr<UAbilitySystemComponent> ASC;
     
     FGameplayAttribute AttributeToListenFor;
     TArray<FGameplayAttribute> AttributesToListenFor;

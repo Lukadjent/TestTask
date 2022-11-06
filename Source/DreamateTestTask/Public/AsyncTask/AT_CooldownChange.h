@@ -29,7 +29,7 @@ public:
 
 protected:
 	UPROPERTY()
-	UAbilitySystemComponent* ASC;
+	TSoftObjectPtr<UAbilitySystemComponent> ASC;
 
 	FGameplayTagContainer CooldownTags;
 

@@ -15,10 +15,10 @@ class DREAMATETESTTASK_API AObelisk : public AActor, public IInteractionInterfac
 	AObelisk();
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "StaticMeshComponent", meta = (AllowPrivateAccess))
-	UStaticMeshComponent* StaticMeshComponent;
+	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "BoxComponent", meta = (AllowPrivateAccess))
-	UBoxComponent* BoxComponent;
+	TObjectPtr<UBoxComponent> BoxComponent;
 	
 public:
 

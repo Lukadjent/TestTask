@@ -28,5 +28,5 @@ protected:
 	FGameplayTag EventEnd;
 
 	UPROPERTY()
-	AActor* Actor;
+	TSoftObjectPtr<AActor> Actor;
 };

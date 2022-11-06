@@ -10,6 +10,7 @@
 #include "Camera/MovingCameraComponent.h"
 #include "Camera/RotatingSpringArmComponent.h"
 #include "GameFramework/GameMode.h"
+#include "GAS/Ability/AbilitySet.h"
 #include "Kismet/GameplayStatics.h"
 
 AGASMainCharacter::AGASMainCharacter()
@@ -27,13 +28,20 @@ AGASMainCharacter::AGASMainCharacter()
 
 	CameraComponent = CreateDefaultSubobject<UMovingCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	AbilityBindingInputComponentInputComponent = CreateDefaultSubobject<UAbilityBindingInputComponent>("AbilityBinding");
+	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
+
+	EnhancedInputComponent = CreateDefaultSubobject<UEnhancedInputComponent>("Enhanced");
+
+	InputComponent = EnhancedInputComponent;
 	
 }
 
 void AGASMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-		
+	
 	IGameModeInterface* GameModeInterface = Cast<IGameModeInterface>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (GameModeInterface)
 	{
@@ -44,6 +52,10 @@ void AGASMainCharacter::BeginPlay()
 	{
 		AbilitySystemComponent->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag(FName("Status.LoseControl")),
 													 EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AGASMainCharacter::LoseControlTagChanged);
+		if (AbilitySet)
+		{
+			AbilitySet->GiveAbilities(AbilitySystemComponent);
+		}
 	}
 	InitializeDefaultAttributesAndEffects();
 }
@@ -52,16 +64,27 @@ void AGASMainCharacter::PawnClientRestart()
 {
 	Super::PawnClientRestart();
 
-	if (const AGASPlayerController* PlayerController = Cast<AGASPlayerController>(GetController()))
+	/*if (ensure(GetController()))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("CONTROLLER INPUT COMPONENT"));
+		InputComponent = GetController()->InputComponent;
+		if (InputComponent)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, FString::Printf(TEXT("%s"), *InputComponent->GetName()));
+		}
+	}*/
+	const IInputMappingInterface* InputMappingInterface = Cast<IInputMappingInterface>(GetController());
+	const APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (InputMappingInterface && PlayerController)
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
 			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->ClearAllMappings();
-			Subsystem->AddMappingContext(PlayerController->GetControlMappingContext(),
-			                             PlayerController->GetControlsMappingPriority());
-			Subsystem->AddMappingContext(PlayerController->GetCombatMappingContext(),
-				                         PlayerController->GetCombatMappingPriority());
+			for (const TTuple<UInputMappingContext*, int32>& Context : InputMappingInterface->GetInputContextsMap())
+			{
+				Subsystem->AddMappingContext(Context.Key, Context.Value);
+			}
 		}
 	}
 }
@@ -97,36 +120,6 @@ void AGASMainCharacter::LoseControlTagChanged(const FGameplayTag CallbackTag, in
 	}
 }
 
-float AGASMainCharacter::GetHealth() const
-{
-	return AttributeSet->GetHealth();
-}
-
-float AGASMainCharacter::GetMaxHealth() const
-{
-	return AttributeSet->GetMaxHealth();
-}
-
-float AGASMainCharacter::GetMana() const
-{
-	return AttributeSet->GetMana();
-}
-
-float AGASMainCharacter::GetMaxMana() const
-{
-	return AttributeSet->GetMaxMana();
-}
-
-float AGASMainCharacter::GetStamina() const
-{
-	return AttributeSet->GetStamina();
-}
-
-float AGASMainCharacter::GetMaxStamina() const
-{
-	return AttributeSet->GetMaxStamina();
-}
-
 UMovingCameraComponent* AGASMainCharacter::GetMovingCameraComponent() const
 {
 	return CameraComponent;
@@ -135,4 +128,25 @@ UMovingCameraComponent* AGASMainCharacter::GetMovingCameraComponent() const
 URotatingSpringArmComponent* AGASMainCharacter::GetRotatingSpringArmComponent() const
 {
 	return SpringArmComponent;
+}
+
+void AGASMainCharacter::BindAbility(FGameplayAbilitySpec& Spec) const
+{
+	if (AbilitySet)
+	{
+		AbilitySet->BindAbility(AbilityBindingInputComponentInputComponent,Spec);
+	}
+}
+
+void AGASMainCharacter::UnbindAbility(FGameplayAbilitySpec& Spec) const
+{
+	if (AbilitySet)
+	{
+		AbilitySet->UnbindAbility(AbilityBindingInputComponentInputComponent,Spec);
+	}
+}
+
+UInteractionComponent* AGASMainCharacter::GetInteractionComponent() const
+{
+	return InteractionComponent;
 }

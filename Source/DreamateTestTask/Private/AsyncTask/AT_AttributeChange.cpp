@@ -45,7 +45,7 @@ UAT_AttributeChange* UAT_AttributeChange::ListenForAttributesChange(
 
 void UAT_AttributeChange::EndTask()
 {
-	if (IsValid(ASC))
+	if (IsValid(ASC.Get()))
 	{
 		ASC->GetGameplayAttributeValueChangeDelegate(AttributeToListenFor).RemoveAll(this);
 		for(const auto& Attribute : AttributesToListenFor)

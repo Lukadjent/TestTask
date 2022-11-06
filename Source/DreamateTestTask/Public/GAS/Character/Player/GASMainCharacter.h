@@ -4,14 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Camera/CameraInterface.h"
+#include "Components/InteractionComponent.h"
 #include "GAS/Character/AI/GASBaseCharacter.h"
+#include "GAS/Ability/AbilityBindingInterface.h"
+#include "Input/AbilityBindingInputComponent.h"
+#include "Interfaces/InteractionComponentInterface.h"
 #include "GASMainCharacter.generated.h"
 
+class UAbilitySet;
 /**
  * 
  */
 UCLASS()
-class DREAMATETESTTASK_API AGASMainCharacter : public AGASBaseCharacter, public ICameraInterface
+class DREAMATETESTTASK_API AGASMainCharacter : public AGASBaseCharacter, public ICameraInterface,
+                                               public IAbilityBindingInterface, public IInteractionComponentInterface
 {
 	GENERATED_BODY()
 
@@ -27,38 +33,34 @@ protected:
 #pragma region CAMERA
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	URotatingSpringArmComponent* SpringArmComponent;
+	TObjectPtr<URotatingSpringArmComponent> SpringArmComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UMovingCameraComponent* CameraComponent;
+	TObjectPtr<UMovingCameraComponent> CameraComponent;
+
+	TObjectPtr<UEnhancedInputComponent> EnhancedInputComponent;
 	
 	float SpringArmLength = 1000.f;
 	
 #pragma endregion
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	const UAbilitySet* AbilitySet;
+
+	TObjectPtr<UAbilityBindingInputComponent> AbilityBindingInputComponentInputComponent;
+	TObjectPtr<UInteractionComponent> InteractionComponent;
+	
 public:
 
 	void LoseControlTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 
-	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
-	float GetHealth() const;
-
-	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
-	float GetMaxHealth() const;
-
-	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
-	float GetMana() const;
-
-	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
-	float GetMaxMana() const;
-
-	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
-	float GetStamina() const;
-
-	UFUNCTION(BlueprintCallable, Category = "GASDocumentation|GDPlayerState|Attributes")
-	float GetMaxStamina() const;
-
 	virtual UMovingCameraComponent* GetMovingCameraComponent() const override;
 
 	virtual URotatingSpringArmComponent* GetRotatingSpringArmComponent() const override;
+
+	virtual void BindAbility(FGameplayAbilitySpec& Spec) const override;
+
+	virtual void UnbindAbility(FGameplayAbilitySpec& Spec) const override;
+
+	virtual UInteractionComponent* GetInteractionComponent() const override;
 };

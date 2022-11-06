@@ -23,24 +23,13 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly)
-	TMap<EAbilities, TSubclassOf<UGameplayAbility>> DefaultAbilities;
-
 	TMap<FItemSlot, FGameplayAbilitySpecHandle> SlottedAbilities;
+
+	virtual void OnGiveAbility(FGameplayAbilitySpec& AbilitySpec) override;
+
+	virtual void OnRemoveAbility(FGameplayAbilitySpec& AbilitySpec) override;
 	
 public:
-
-#pragma region ABILITIES
-	bool Roll();
-	bool Parry();
-	bool CastSpell();
-	bool UseConsumable();
-	bool Attack();
-#pragma endregion
-
-	//Activate ability given by item that is slotted
-	UFUNCTION()
-	bool ActivateAbilitiesWithItemSlot(FItemSlot ItemSlot);
 
 	//Remove ability when slotted item changes
 	UFUNCTION(BlueprintCallable, Category = "Ability")

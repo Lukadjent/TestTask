@@ -13,6 +13,8 @@ class DREAMATETESTTASK_API UDreamateBlueprintFunctionLibrary : public UBlueprint
 {
 	GENERATED_BODY()
 
+public:
+	
 	UFUNCTION(BlueprintCallable, Category = "DreamateBPFLibrary")
 	static ETeamAttitude::Type GetAttitudeBetween(const AActor* A1, const AActor* A2);
 
@@ -21,4 +23,7 @@ class DREAMATETESTTASK_API UDreamateBlueprintFunctionLibrary : public UBlueprint
 
 	UFUNCTION(BlueprintCallable, Category = "DreamateBPFLibrary")
 	static AAIController* GetAIController(AActor* ControlledActor);
+
+	UFUNCTION(BlueprintCallable, Category = "DreamateBPFLibrary")
+	static bool IsControlledByPlayer(AActor* Actor);
 };

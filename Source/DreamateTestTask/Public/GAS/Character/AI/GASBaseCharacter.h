@@ -9,6 +9,7 @@
 #include "GAS/AbilitySystemComponentInterface.h"
 #include "GAS/ASComponent.h"
 #include "GAS/AttributeSet/BaseAttributeSet.h"
+#include "Interfaces/Death.h"
 #include "Inventory/InventoryInterface.h"
 #include "Inventory/InventoryTypes.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
@@ -17,7 +18,7 @@
 class UInventoryComponent;
 
 UCLASS()
-class DREAMATETESTTASK_API AGASBaseCharacter : public ACharacter, public IAbilitySystemComponentInterface, public IInventoryInterface
+class DREAMATETESTTASK_API AGASBaseCharacter : public ACharacter, public IAbilitySystemComponentInterface, public IInventoryInterface, public IDeath
 {
 	GENERATED_BODY()
 
@@ -29,21 +30,21 @@ protected:
 #pragma region COMPONENTS
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Perception")
-	UAIPerceptionStimuliSourceComponent* StimuliSourceComponent;
+	TObjectPtr<UAIPerceptionStimuliSourceComponent> StimuliSourceComponent;
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	UChildActorComponent* WeaponComponent;
+	TObjectPtr<UChildActorComponent> WeaponComponent;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Inventory")
-	UInventoryComponent* Inventory;
+	TObjectPtr<UInventoryComponent> Inventory;
 	
 	UPROPERTY(EditDefaultsOnly)
-	UASComponent* AbilitySystemComponent;
+	TObjectPtr<UASComponent> AbilitySystemComponent;
 
 #pragma endregion
 	
 	UPROPERTY(EditDefaultsOnly)
-	UBaseAttributeSet* AttributeSet;
+	TObjectPtr<UBaseAttributeSet> AttributeSet;
 
 	//Initialize attributes, Stamina regeneration
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
@@ -59,13 +60,7 @@ protected:
 	void SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item);
 
 public:
-	
-	//Delegate on Character Death
-	DECLARE_MULTICAST_DELEGATE(FCharacterDeath);
-	FCharacterDeath CharacterDeath;
-	
-	UFUNCTION(BlueprintCallable)
-	void NotifyDeath();
+	virtual void NotifyDeath_Implementation() const override;
 
 
 #pragma region COMPONENT_GETTERS

@@ -21,9 +21,9 @@ class DREAMATETESTTASK_API AMainHUD : public AHUD
 virtual void BeginPlay() override;
 
 public:
-	
 	UPROPERTY(BlueprintReadWrite)
-	UCharacterHUDWidget* MainHUDWidget;
+    	TSoftObjectPtr<UCharacterHUDWidget> MainHUDWidget;
+	
 
 protected:
 
@@ -33,7 +33,7 @@ protected:
 #pragma region INVENTORY
 	
 	UPROPERTY(BlueprintReadOnly)
-	UInventoryWidget* InventoryWidget;
+	TSoftObjectPtr<UInventoryWidget> InventoryWidget;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HUD")
 	TSubclassOf<UUserWidget> InventoryWidgetClass;
@@ -45,10 +45,10 @@ protected:
 #pragma region END_OF_THE_GAME
 
 	UPROPERTY()
-	UVictoryWidget* VictoryWidget;
+	TSoftObjectPtr<UVictoryWidget> VictoryWidget;
 
 	UPROPERTY()
-	ULoseWidget* LoseWidget;
+	TSoftObjectPtr<ULoseWidget> LoseWidget;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HUD")
 	TSubclassOf<UUserWidget> VictoryWidgetClass;

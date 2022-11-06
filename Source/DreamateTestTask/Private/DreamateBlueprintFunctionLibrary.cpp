@@ -38,3 +38,12 @@ AAIController* UDreamateBlueprintFunctionLibrary::GetAIController(AActor* Contro
 	}
 	return Cast<AAIController>(ControlledActor);
 }
+
+bool UDreamateBlueprintFunctionLibrary::IsControlledByPlayer(AActor* Actor)
+{
+	if (GetPlayerController(Actor))
+	{
+		return true;
+	}
+	return false;
+}

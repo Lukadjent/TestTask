@@ -2,8 +2,9 @@
 
 #include "BehaviorTree/Task/BTTaskChoosePatrolPoint.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "GAS/Character/AI/GASAIController.h"
-#include "GAS/Character/AI/GASBaseEnemy.h"
+#include "Engine/TargetPoint.h"
+#include "GAS/Character/AI/PatrolComponent.h"
+#include "GAS/Character/AI/PatrolInterface.h"
 
 UBTTaskChoosePatrolPoint::UBTTaskChoosePatrolPoint()
 {
@@ -12,17 +13,15 @@ UBTTaskChoosePatrolPoint::UBTTaskChoosePatrolPoint()
 
 EBTNodeResult::Type UBTTaskChoosePatrolPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	if (const AGASBaseEnemy* Pawn = Cast<AGASBaseEnemy>(Cast<AGASAIController>(OwnerComp.GetOwner())->GetPawn()))
+	check(OwnerComp.GetBlackboardComponent());
+	if (const IPatrolInterface* PatrolInterface = Cast<IPatrolInterface>(Cast<AController>(OwnerComp.GetOwner())->GetPawn()))
 	{
-		if (UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent())
+		if (!PatrolInterface->GetPatrolComponent()->GetPatrolPoints().IsEmpty())
 		{
-			if (!Pawn->GetPatrolPoints().IsEmpty())
-			{
-				int32 index = Pawn->GetPatrolPoints().IndexOfByKey(BlackboardComponent->GetValueAsObject("PatrolPoint"));
-				index = (index + 1) % Pawn->GetPatrolPoints().Num();
-				BlackboardComponent->SetValueAsObject("PatrolPoint", Pawn->GetPatrolPoints()[index]);
-				return EBTNodeResult::Succeeded;
-			}
+			int32 index = PatrolInterface->GetPatrolComponent()->GetPatrolPoints().IndexOfByKey(OwnerComp.GetBlackboardComponent()->GetValueAsObject("PatrolPoint"));
+			index = (index + 1) % PatrolInterface->GetPatrolComponent()->GetPatrolPoints().Num();
+			OwnerComp.GetBlackboardComponent()->SetValueAsObject("PatrolPoint", PatrolInterface->GetPatrolComponent()->GetPatrolPoints()[index]);
+			return EBTNodeResult::Succeeded;
 		}
 	}
 	return EBTNodeResult::Failed;

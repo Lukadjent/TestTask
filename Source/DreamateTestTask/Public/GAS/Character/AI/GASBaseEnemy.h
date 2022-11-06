@@ -5,37 +5,35 @@
 #include "CoreMinimal.h"
 #include "Dummy.h"
 #include "GASBaseCharacter.h"
-#include "Components/WidgetComponent.h"
-#include "Engine/TargetPoint.h"
-#include "InteractableObjects/PickUpBase.h"
+#include "PatrolInterface.h"
+#include "Inventory/LootComponent.h"
 #include "UI/FloatingBarWidget.h"
 #include "GASBaseEnemy.generated.h"
 
+class UAbilitySet;
 /**
  * 
  */
 UCLASS()
-class DREAMATETESTTASK_API AGASBaseEnemy : public ADummy
+class DREAMATETESTTASK_API AGASBaseEnemy : public ADummy, public IPatrolInterface
 {
 	GENERATED_BODY()
 
 	AGASBaseEnemy();
 
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Patrol", Meta = (AllowPrivateAccess))
+	TObjectPtr<UPatrolComponent> PatrolComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Patrol", Meta = (AllowPrivateAccess))
+	TObjectPtr<ULootComponent> LootComponent;
 
 protected:
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Drop")
-	TArray<TSubclassOf<APickUpBase>> Drop;
-
-	//Should be a value from 0.0 to 1.0
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Drop")
-	float DropProbability;
-
-	//Patrol points where character will go
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI | Patroling")
-	TArray<ATargetPoint*> PatrolPoints;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	const UAbilitySet* AbilitySet;
+	
 	//Override of the function that reacts on Immobile tag added/removed
 	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
 
@@ -43,8 +41,6 @@ protected:
 	
 public:
 
-	TArray<ATargetPoint*> GetPatrolPoints() const;
-	
-	void SpawnLoot();
+	virtual UPatrolComponent* GetPatrolComponent() const override;
 	
 };

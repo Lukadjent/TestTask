@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GAS/Character/AI/GASAIController.h"
+
+#include "DreamateBlueprintFunctionLibrary.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GAS/Character/Player/GASMainCharacter.h"
@@ -58,8 +60,11 @@ ETeamAttitude::Type AGASAIController::GetTeamAttitudeTowards(const AActor& Other
 
 void AGASAIController::ActorsPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 {
-	if (UpdatedActors[0]->IsA(AGASMainCharacter::StaticClass()))
+	for (AActor* UpdatedActor : UpdatedActors)
 	{
-		BlackboardComponent->SetValueAsObject("Player", UpdatedActors[0]);
+		if (UDreamateBlueprintFunctionLibrary::IsControlledByPlayer(UpdatedActor))
+		{
+			BlackboardComponent->SetValueAsObject("Player", UpdatedActor);
+		}
 	}
 }

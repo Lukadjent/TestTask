@@ -18,7 +18,6 @@ class DREAMATETESTTASK_API UGEEC_CalculateDamage : public UGameplayEffectExecuti
 	
 	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
 
-	FName DamageSetByCallerTag = "Attribute.Damage";
+	const FGameplayTag Tag = FGameplayTag::RequestGameplayTag("Status.Stunned");
 	
-	FName StunTag = "Status.Stunned";
 };

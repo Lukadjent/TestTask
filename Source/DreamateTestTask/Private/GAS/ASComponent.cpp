@@ -2,7 +2,7 @@
 
 
 #include "GAS/ASComponent.h"
-
+#include "GAS/Ability/AbilityBindingInterface.h"
 #include "Inventory/InventoryComponent.h"
 #include "Inventory/InventoryInterface.h"
 
@@ -18,62 +18,29 @@ UASComponent::UASComponent()
 void UASComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	for (const TTuple<EAbilities, TSubclassOf<UGameplayAbility>>& Ability : DefaultAbilities)
-	{
-		GiveAbility(FGameplayAbilitySpec(Ability.Value, 1,static_cast<int32>(Ability.Key)));
-	}
 	
 }
 
-bool UASComponent::Roll()
+void UASComponent::OnGiveAbility(FGameplayAbilitySpec& AbilitySpec)
 {
-	if (!DefaultAbilities[EAbilities::Roll])
+	const IAbilityBindingInterface* ABI = Cast<IAbilityBindingInterface>(GetAvatarActor_Direct());
+	if (ABI)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UASComponent: Roll Ability Isn't Given"));
-		return false;
+		ABI->BindAbility(AbilitySpec);
 	}
-	return TryActivateAbilityByClass(DefaultAbilities[EAbilities::Roll]);
+	
+	Super::OnGiveAbility(AbilitySpec);
 }
 
-bool UASComponent::Parry()
+void UASComponent::OnRemoveAbility(FGameplayAbilitySpec& AbilitySpec)
 {
-	if (!DefaultAbilities[EAbilities::Parry])
+	const IAbilityBindingInterface* ABI = Cast<IAbilityBindingInterface>(GetAvatarActor_Direct());
+	if (ABI)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UASComponent: Parry Ability Isn't Given"));
-		return false;
+		ABI->UnbindAbility(AbilitySpec);
 	}
-	return TryActivateAbilityByClass(DefaultAbilities[EAbilities::Parry]);
-}
-
-bool UASComponent::CastSpell()
-{
-	if (!DefaultAbilities[EAbilities::CastSpell])
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UASComponent: CastSpell Ability Isn't Given"));
-		return false;
-	}
-	return TryActivateAbilityByClass(DefaultAbilities[EAbilities::CastSpell]);
-}
-
-bool UASComponent::UseConsumable()
-{
-	return ActivateAbilitiesWithItemSlot(UItemAssetManager::PotionItemType);
-}
-
-bool UASComponent::Attack()
-{
-	return ActivateAbilitiesWithItemSlot(UItemAssetManager::WeaponItemType);
-}
-
-bool UASComponent::ActivateAbilitiesWithItemSlot(FItemSlot ItemSlot)
-{
-	const FGameplayAbilitySpecHandle* SpecHandle = SlottedAbilities.Find(ItemSlot);
-	if (SpecHandle)
-	{
-		return TryActivateAbility(*SpecHandle);
-	}
-	return false;
+	
+	Super::OnRemoveAbility(AbilitySpec);
 }
 
 void UASComponent::RemoveSlottedGameplayAbilities(FItemSlot InSlot)

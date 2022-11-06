@@ -57,11 +57,6 @@ void AGASBaseCharacter::OnMovementSpeedChange(const FOnAttributeChangeData& Data
 	GetCharacterMovement()->MaxWalkSpeed = AttributeSet->GetMoveSpeed();
 }
 
-void AGASBaseCharacter::NotifyDeath()
-{
-	CharacterDeath.Broadcast();
-}
-
 void AGASBaseCharacter::SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item)
 {
 	if (ItemSlot.GetItemType() == UItemAssetManager::WeaponItemType)
@@ -73,6 +68,11 @@ void AGASBaseCharacter::SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item)
 	}
 	AbilitySystemComponent->RemoveSlottedGameplayAbilities(ItemSlot);
 	AbilitySystemComponent->AddSlottedGameplayAbilities();
+}
+
+void AGASBaseCharacter::NotifyDeath_Implementation() const
+{
+	CharacterDeath.Broadcast();
 }
 
 #pragma region GETTERS

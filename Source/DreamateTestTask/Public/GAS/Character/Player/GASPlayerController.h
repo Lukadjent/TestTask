@@ -12,6 +12,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Interfaces/InputMappingInterface.h"
 #include "UI/InventoryWidget.h"
 #include "GASPlayerController.generated.h"
 
@@ -19,7 +20,7 @@
  * 
  */
 UCLASS()
-class DREAMATETESTTASK_API AGASPlayerController : public APlayerController, public IGenericTeamAgentInterface, public IPlayerControllerInterface
+class DREAMATETESTTASK_API AGASPlayerController : public APlayerController, public IGenericTeamAgentInterface, public IPlayerControllerInterface, public IInputMappingInterface
 {
 	GENERATED_BODY()
 
@@ -31,13 +32,15 @@ class DREAMATETESTTASK_API AGASPlayerController : public APlayerController, publ
 
 protected:
 
-#pragma region CHARACTER_CAMERA
+#pragma region CHARACTER_COMPONENTS
 
 	UPROPERTY()
-	UMovingCameraComponent* CameraComponent;
+	TSoftObjectPtr<UMovingCameraComponent> CameraComponent;
 
 	UPROPERTY()
-	URotatingSpringArmComponent* SpringArmComponent;
+	TSoftObjectPtr<URotatingSpringArmComponent> SpringArmComponent;
+
+	TSoftObjectPtr<UInteractionComponent> InteractionComponent;
 
 #pragma endregion
 	
@@ -45,41 +48,20 @@ protected:
 	
 	// CONTROL INPUT ACTIONS //
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
-	UInputAction* IA_Movement;
+	TSoftObjectPtr<UInputAction> IA_Movement;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
-	UInputAction* IA_CameraMovement;
+	TSoftObjectPtr<UInputAction> IA_CameraMovement;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
-	UInputAction* IA_AttachCamera;
+	TSoftObjectPtr<UInputAction> IA_AttachCamera;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
-    UInputAction* IA_RotateCamera;
+    TSoftObjectPtr<UInputAction> IA_RotateCamera;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
-	UInputAction* IA_Inventory;
+	TSoftObjectPtr<UInputAction> IA_Inventory;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
-	UInputAction* IA_UseConsumable;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Actions")
-	UInputAction* IA_Interact;
-	
-	// CONTROL INPUT MAPPINGS //
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Mappings")
-	UInputMappingContext* ControlMappingContext;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Control|Input Mappings")
-	int32 ControlsMappingPriority = 0;
+	TSoftObjectPtr<UInputAction> IA_Interact;
 
-	// COMBAT INPUT ACTIONS //
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Combat|Input Actions")
-	UInputAction* IA_Attack;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Combat|Input Actions")
-	UInputAction* IA_Roll;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Combat|Input Actions")
-	UInputAction* IA_Parry;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Combat|Input Actions")
-	UInputAction* IA_CastSpell;
-	
-	// COMBAT INPUT MAPPINGS //
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Combat|Input Mappings")
-	UInputMappingContext* CombatMappingContext;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Controls|Combat|Input Mappings")
-	int32 CombatMappingPriority = 1;
+	TMap<UInputMappingContext*, int32> MappingContexts;
 
 	// INPUT FUNCTIONS //
 	void OnMovementAction();
@@ -87,27 +69,12 @@ protected:
 	void OnAttachCameraAction();
 	void OnDetachCameraAction();
 	void OnRotateCameraAction(const FInputActionValue& Value);
-	void OnAttackAction();
-	void OnRollAction();
-	void OnParryAction();
-	void OnCastSpellAction();
-	void OnUseConsumableAction();
 	void OnInteractAction();
 
 	UFUNCTION(BlueprintCallable)
 	void OnInventoryAction();
 
 #pragma endregion
-
-#pragma region INVENTORY
-	
-	UPROPERTY(BlueprintReadOnly)
-	UInventoryWidget* InventoryWidget;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory")
-	TSubclassOf<UUserWidget> InventoryWidgetClass;
-
-#pragma endregion 
 
 #pragma  region GENERICTEAMINTERFACE
 	
@@ -117,19 +84,8 @@ protected:
 
 #pragma endregion
 
-	void HandleInteractedObject(UObject* InteractedObject) const;
-	
-	UPROPERTY()
-	UASComponent* ASComponent;
-
 public:
 	
-	UInputMappingContext* GetControlMappingContext() const;
-
-	int32 GetControlsMappingPriority() const;
-
-	UInputMappingContext* GetCombatMappingContext() const;
-
-	int32 GetCombatMappingPriority() const;
+	virtual TMap<UInputMappingContext*, int32> GetInputContextsMap() const override;
 };
 

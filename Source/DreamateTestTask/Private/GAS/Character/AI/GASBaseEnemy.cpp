@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/GameMode.h"
 #include "GameFramework/GameModeBase.h"
+#include "GAS/Ability/AbilitySet.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "UI/FloatingBarWidget.h"
@@ -13,7 +14,8 @@
 //Create widget component and set the variables of it
 AGASBaseEnemy::AGASBaseEnemy()
 {
-	
+	PatrolComponent = CreateDefaultSubobject<UPatrolComponent>("PatrolComponent");
+	LootComponent = CreateDefaultSubobject<ULootComponent>("LootComponent");
 }
 
 void AGASBaseEnemy::BeginPlay()
@@ -25,6 +27,10 @@ void AGASBaseEnemy::BeginPlay()
 		GameModeInterface->AddToEnemyArray();
 		CharacterDeath.AddRaw(GameModeInterface, &IGameModeInterface::OnEnemyCharacterDeath);
 		CharacterDeath.AddUObject(this, &AGASBaseEnemy::OnDeath);
+	}
+	if (AbilitySystemComponent && AbilitySet)
+	{
+		AbilitySet->GiveAbilities(AbilitySystemComponent);
 	}
 }
 
@@ -43,24 +49,11 @@ void AGASBaseEnemy::ImmobileTagChanged(const FGameplayTag CallbackTag, int32 New
 
 void AGASBaseEnemy::OnDeath()
 {
-	SpawnLoot();
+	LootComponent->SpawnLoot();
 	Destroy();
 }
 
-TArray<ATargetPoint*> AGASBaseEnemy::GetPatrolPoints() const
+UPatrolComponent* AGASBaseEnemy::GetPatrolComponent() const
 {
-	return PatrolPoints;
-}
-
-void AGASBaseEnemy::SpawnLoot()
-{
-	if (!Drop.IsEmpty())
-	{
-		if (UKismetMathLibrary::RandomBoolWithWeight(DropProbability))
-		{
-			const TSubclassOf<APickUpBase> Class = Drop[FMath::RandRange(0, Drop.Num() - 1)];
-			const FVector SpawnLocation = GetActorLocation() - FVector(0.f,0.f, 80.f);
-			GetWorld()->SpawnActor(Class, &SpawnLocation);	
-		}
-	}
+	return PatrolComponent.Get();
 }

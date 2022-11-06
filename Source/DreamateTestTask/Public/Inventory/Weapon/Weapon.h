@@ -23,15 +23,15 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UStaticMeshComponent* StaticMeshComponent;
+	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UBoxComponent* BoxCollisionComponent;
+	TObjectPtr<UBoxComponent> BoxCollisionComponent;
 
 #pragma region WEAPON_DATA
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapon")
-	UWeaponItemData* ItemData;
+	TSoftObjectPtr<UWeaponItemData> ItemData;
 
 	FGameplayTag Hit;
 

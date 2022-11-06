@@ -8,10 +8,10 @@
 void UANS_Attack::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
 	Actor = MeshComp->GetOwner();
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Actor, EventBegin, FGameplayEventData());
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Actor.Get(), EventBegin, FGameplayEventData());
 }
 
 void UANS_Attack::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Actor, EventEnd, FGameplayEventData());
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Actor.Get(), EventEnd, FGameplayEventData());
 }

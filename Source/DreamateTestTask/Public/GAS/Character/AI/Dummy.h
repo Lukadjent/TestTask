@@ -23,13 +23,13 @@ protected:
 	virtual void BeginPlay() override;
 	
 	UPROPERTY()
-	UFloatingBarWidget* FloatingBarWidget;
+	TObjectPtr<UFloatingBarWidget> FloatingBarWidget;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "UI|Bar")
 	TSubclassOf<UFloatingBarWidget> FloatingBarClass;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "UI")
-	UWidgetComponent* WidgetComponent;
+	TObjectPtr<UWidgetComponent> WidgetComponent;
 
 	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
 };

@@ -24,13 +24,13 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	USphereComponent* Collision;
+	TObjectPtr<USphereComponent> Collision;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UProjectileMovementComponent* ProjectileMovementComponent;
+	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UParticleSystemComponent* ParticleSystemComponent;
+	TObjectPtr<UParticleSystemComponent> ParticleSystemComponent;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FGameplayTag DamageTag;
