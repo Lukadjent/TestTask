@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/CharacterWidgetComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GAS/Character/AI/GASBaseCharacter.h"
 #include "UI/FloatingBarWidget.h"
@@ -21,15 +22,9 @@ protected:
 	ADummy();
 
 	virtual void BeginPlay() override;
-	
-	UPROPERTY()
-	TObjectPtr<UFloatingBarWidget> FloatingBarWidget;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "UI|Bar")
-	TSubclassOf<UFloatingBarWidget> FloatingBarClass;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "UI")
-	TObjectPtr<UWidgetComponent> WidgetComponent;
+	TObjectPtr<UCharacterWidgetComponent> WidgetComponent;
 
 	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
 };
