@@ -3,29 +3,26 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "UObject/Interface.h"
-#include "Death.generated.h"
-
-
-DECLARE_MULTICAST_DELEGATE(FCharacterDeath);
+#include "MovementComponentInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(BlueprintType, Blueprintable)
-class UDeath : public UInterface
+UINTERFACE()
+class UMovementComponentInterface : public UInterface
 {
 	GENERATED_BODY()
 };
 
-class DREAMATETESTTASK_API IDeath
+/**
+ * 
+ */
+class DREAMATETESTTASK_API IMovementComponentInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
-	//UPROPERTY(BlueprintAssignable)
-	FCharacterDeath CharacterDeath;
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void NotifyDeath() const;
+	virtual UCharacterMovementComponent* GetCharacterMovementComponent() const = 0;
 };

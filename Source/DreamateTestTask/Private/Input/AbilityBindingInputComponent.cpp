@@ -37,6 +37,9 @@ void UAbilityBindingInputComponent::SetInputBinding(UInputAction* InputAction, F
 	}
 	
 	AbilityInputBinding->BoundAbilitiesStack.AddUnique(AbilitySpec.Handle);
+
+	AbilityInputBinding->InputID = AbilitySpec.InputID;
+	
 	if (InputComponent)
 	{
 		if (AbilityInputBinding->OnPressedHandle == 0)
@@ -54,11 +57,11 @@ void UAbilityBindingInputComponent::SetInputBinding(UInputAction* InputAction, F
 void UAbilityBindingInputComponent::ClearInputBinding(FGameplayAbilitySpec& AbilitySpec)
 {
 	using namespace AbilityInputBindingComponent_Impl;
-
+	
 	TArray<UInputAction*> InputActionsToClear;
 	for (auto& InputBinding : MappedAbilities)
 	{
-		if (InputBinding.Value.BoundAbilitiesStack.Find(AbilitySpec.Handle))
+		if (InputBinding.Value.BoundAbilitiesStack.Contains(AbilitySpec.Handle))
 		{
 			InputActionsToClear.Add(InputBinding.Key);
 		}
@@ -75,7 +78,7 @@ void UAbilityBindingInputComponent::ClearInputBinding(FGameplayAbilitySpec& Abil
 			}
 		}
 	}
-
+	
 	AbilitySpec.InputID = InvalidInputID;
 }
 
@@ -161,7 +164,7 @@ void UAbilityBindingInputComponent::RemoveEntry(const UInputAction* InputAction)
 			InputComponent->RemoveBindingByHandle(Bindings->OnPressedHandle);
 			InputComponent->RemoveBindingByHandle(Bindings->OnReleasedHandle);
 		}
-
+		
 		for (const FGameplayAbilitySpecHandle &AbilityHandle : Bindings->BoundAbilitiesStack)
 		{
 			using namespace AbilityInputBindingComponent_Impl;
@@ -172,8 +175,10 @@ void UAbilityBindingInputComponent::RemoveEntry(const UInputAction* InputAction)
 				AbilitySpec->InputID = InvalidInputID;	
 			}
 		}
+		
 		MappedAbilities.Remove(InputAction);
-	}	
+		
+	}
 }
 
 FGameplayAbilitySpec* UAbilityBindingInputComponent::FindAbilitySpec(FGameplayAbilitySpecHandle Handle) const

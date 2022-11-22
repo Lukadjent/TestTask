@@ -8,17 +8,3 @@ ADummy::ADummy()
 	WidgetComponent = CreateDefaultSubobject<UCharacterWidgetComponent>("WidgetComponent");
 	WidgetComponent->SetupAttachment(RootComponent);
 }
-
-void ADummy::BeginPlay()
-{
-	Super::BeginPlay();
-	
-	InitializeDefaultAttributesAndEffects();
-	
-}
-
-void ADummy::ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
-{
-	
-}
-

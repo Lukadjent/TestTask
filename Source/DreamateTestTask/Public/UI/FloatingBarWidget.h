@@ -26,7 +26,7 @@ class DREAMATETESTTASK_API UFloatingBarWidget : public UUserWidget, public IAttr
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Settings", Meta = (AllowPrivateAccess))
 	FLinearColor BarColor;
-	
+
 public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)

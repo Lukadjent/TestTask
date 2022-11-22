@@ -2,13 +2,24 @@
 
 
 #include "Inventory/LootComponent.h"
-
+#include "Interfaces/Death.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
 ULootComponent::ULootComponent()
 {
 	
+}
+
+void ULootComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	IDeath* DeathInterface = Cast<IDeath>(GetOwner());
+	if (DeathInterface)
+	{
+		DeathInterface->CharacterDeath.AddUObject(this, &ULootComponent::SpawnLoot);
+	}
 }
 
 void ULootComponent::SpawnLoot() const

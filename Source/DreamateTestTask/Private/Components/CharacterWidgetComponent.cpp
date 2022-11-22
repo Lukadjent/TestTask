@@ -30,6 +30,7 @@ void UCharacterWidgetComponent::BeginPlay()
 		FloatingBarWidget->SetOwningActor(GetOwner());
 		FloatingBarWidget->Update();
 		SetWidget(FloatingBarWidget);
+		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Black, TEXT("I am here"));
 	}
 	
 }

@@ -26,5 +26,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual UInventoryComponent* GetInventoryComponent() const = 0;
-	
+
+	UFUNCTION(BlueprintCallable)
+	virtual UChildActorComponent* GetWeaponComponent() const = 0;	
 };

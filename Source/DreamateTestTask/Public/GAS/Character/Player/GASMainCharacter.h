@@ -27,10 +27,8 @@ class DREAMATETESTTASK_API AGASMainCharacter : public AGASBaseCharacter, public 
 	
 	virtual void PawnClientRestart() override;
 
-	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
-
 protected:
-#pragma region CAMERA
+#pragma region COMPONENTS
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<URotatingSpringArmComponent> SpringArmComponent;
@@ -39,19 +37,23 @@ protected:
 	TObjectPtr<UMovingCameraComponent> CameraComponent;
 
 	TObjectPtr<UEnhancedInputComponent> EnhancedInputComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UAbilitySetComponent> AbilitySetComponent;
 	
 	float SpringArmLength = 1000.f;
-	
-#pragma endregion
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	const UAbilitySet* AbilitySet;
+	TObjectPtr<UAbilityBindingInputComponent> AbilityBindingInputComponent;
 
-	TObjectPtr<UAbilityBindingInputComponent> AbilityBindingInputComponentInputComponent;
 	TObjectPtr<UInteractionComponent> InteractionComponent;
 	
-public:
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UGASCharacterComponent> GASCharacterComponent;
 
+#pragma endregion
+	
+public:
+	
 	void LoseControlTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 
 	virtual UMovingCameraComponent* GetMovingCameraComponent() const override;

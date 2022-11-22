@@ -5,6 +5,7 @@
 #include "GAS/Ability/AbilityBindingInterface.h"
 #include "Inventory/InventoryComponent.h"
 #include "Inventory/InventoryInterface.h"
+#include "Inventory/Item/WeaponItemData.h"
 
 
 // Sets default values for this component's properties
@@ -18,6 +19,12 @@ UASComponent::UASComponent()
 void UASComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	IInventoryInterface* Inventory = Cast<IInventoryInterface>(GetOwner());
+	if (Inventory)
+	{
+		Inventory->GetInventoryComponent()->OnSlottedItemChangedNative.AddUObject(this, &UASComponent::SlottedItemChanged);
+	}
 	
 }
 
@@ -41,6 +48,23 @@ void UASComponent::OnRemoveAbility(FGameplayAbilitySpec& AbilitySpec)
 	}
 	
 	Super::OnRemoveAbility(AbilitySpec);
+}
+
+void UASComponent::SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item)
+{
+	const IInventoryInterface* Inventory = Cast<IInventoryInterface>(GetOwner());
+	if (Inventory)
+	{
+		if (ItemSlot.GetItemType() == UItemAssetManager::WeaponItemType)
+		{
+			if (const UWeaponItemData* WeaponData = Cast<UWeaponItemData>(Item))
+			{
+				Inventory->GetWeaponComponent()->SetChildActorClass(WeaponData->GetWeaponClass());
+			}
+		}
+		RemoveSlottedGameplayAbilities(ItemSlot);
+		AddSlottedGameplayAbilities();
+	}
 }
 
 void UASComponent::RemoveSlottedGameplayAbilities(FItemSlot InSlot)
@@ -80,16 +104,24 @@ void UASComponent::FillSlottedAbilitySpecs(TMap<FItemSlot, FGameplayAbilitySpec>
 				const UItemData* SlottedItem = ItemPair.Value;
 				if (SlottedItem && SlottedItem->GrantedAbility)
 				{
-					SlottedAbilitySpecs.Add(ItemPair.Key,FGameplayAbilitySpec(SlottedItem->GrantedAbility));
+					SlottedAbilitySpecs.Add(ItemPair.Key,FGameplayAbilitySpec(SlottedItem->GrantedAbility, 0, 0));
 				}
 			}
 		}
 	}
 }
 
-void UASComponent::BindAttributeToWidget(FGameplayAttribute Attribute, FGameplayAttribute AttributeMax, TScriptInterface<IAttributesWidgetInterface> Widget) const
+void UASComponent::InitializeDefaultAttributesAndEffects()
 {
-	IAttributesWidgetInterface::Execute_SetAttribute(Widget.GetObject(), Attribute);
-	IAttributesWidgetInterface::Execute_SetAttributeMax(Widget.GetObject(), AttributeMax);
-	IAttributesWidgetInterface::Execute_SetAbilitySystemComponent(Widget.GetObject(), this);
+	FGameplayEffectContextHandle EffectContext = MakeEffectContext();
+	EffectContext.AddSourceObject(this);
+	
+	for (const TSubclassOf<UGameplayEffect>& Effect : StartupEffects)
+	{
+		FGameplayEffectSpecHandle NewHandle = MakeOutgoingSpec(Effect, 0.f, EffectContext);
+		if (NewHandle.IsValid())
+		{
+			ApplyGameplayEffectSpecToSelf(*NewHandle.Data.Get());
+		}
+	}
 }

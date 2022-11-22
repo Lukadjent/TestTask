@@ -44,15 +44,17 @@ private:
 	
 	void RemoveEntry(const UInputAction* InputAction);
 	
-	FGameplayAbilitySpec* FindAbilitySpec(FGameplayAbilitySpecHandle Handle) const;
 	
 	UPROPERTY(Transient)
 	UAbilitySystemComponent* AbilityComponent;
 
 	UPROPERTY(Transient)
 	UEnhancedInputComponent* InputComponent;
-	
+
+public:
 	UPROPERTY(Transient)
 	TMap<UInputAction*, FAbilityInputBinding> MappedAbilities;
+
+	FGameplayAbilitySpec* FindAbilitySpec(FGameplayAbilitySpecHandle Handle) const;
 };
 

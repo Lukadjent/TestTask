@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/CharacterWidgetComponent.h"
-#include "Components/WidgetComponent.h"
 #include "GAS/Character/AI/GASBaseCharacter.h"
 #include "UI/FloatingBarWidget.h"
 #include "Dummy.generated.h"
@@ -21,10 +20,7 @@ protected:
 	
 	ADummy();
 
-	virtual void BeginPlay() override;
-
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "UI")
 	TObjectPtr<UCharacterWidgetComponent> WidgetComponent;
-
-	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
+	
 };

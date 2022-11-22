@@ -3,42 +3,44 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Dummy.h"
 #include "GASBaseCharacter.h"
 #include "PatrolInterface.h"
 #include "Inventory/LootComponent.h"
 #include "UI/FloatingBarWidget.h"
 #include "GASBaseEnemy.generated.h"
 
+class UCharacterWidgetComponent;
 class UAbilitySet;
 /**
  * 
  */
 UCLASS()
-class DREAMATETESTTASK_API AGASBaseEnemy : public ADummy, public IPatrolInterface
+class DREAMATETESTTASK_API AGASBaseEnemy : public AGASBaseCharacter, public IPatrolInterface
 {
 	GENERATED_BODY()
 
 	AGASBaseEnemy();
 
 	virtual void BeginPlay() override;
-	
+
+#pragma region COMPONENTS
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Patrol", Meta = (AllowPrivateAccess))
 	TObjectPtr<UPatrolComponent> PatrolComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Patrol", Meta = (AllowPrivateAccess))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Loop", Meta = (AllowPrivateAccess))
 	TObjectPtr<ULootComponent> LootComponent;
 
-protected:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "UI", Meta = (AllowPrivateAccess))
+	TObjectPtr<UCharacterWidgetComponent> WidgetComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	const UAbilitySet* AbilitySet;
-	
-	//Override of the function that reacts on Immobile tag added/removed
-	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UAbilitySetComponent> AbilitySetComponent;
 
-	void OnDeath();
-	
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UGASCharacterComponent> GASCharacterComponent;
+
+#pragma endregion
 public:
 
 	virtual UPatrolComponent* GetPatrolComponent() const override;

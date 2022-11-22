@@ -3,7 +3,10 @@
 
 #include "GAS/MainGameMode.h"
 
-void AMainGameMode::OnPlayerCharacterDeath() 
+#include "GameFramework/Character.h"
+#include "Interfaces/Death.h"
+
+void AMainGameMode::OnPlayerCharacterDeath()
 {
 	Lose();
 }
@@ -17,9 +20,21 @@ void AMainGameMode::OnEnemyCharacterDeath()
 	}
 }
 
-void AMainGameMode::AddToEnemyArray()
+void AMainGameMode::CharacterSpawn(ACharacter* Character)
 {
-	++EnemyCounter;
+	IDeath* DeathInterface = Cast<IDeath>(Character);
+	if (DeathInterface)
+	{
+		if (Character->GetClass() == DefaultPawnClass)
+		{
+			DeathInterface->CharacterDeath.AddUObject(this, &AMainGameMode::OnPlayerCharacterDeath);
+		}
+		else
+		{
+			++EnemyCounter;
+			DeathInterface->CharacterDeath.AddUObject(this, &AMainGameMode::OnEnemyCharacterDeath);
+		}
+	}
 }
 
 void AMainGameMode::Victory() const

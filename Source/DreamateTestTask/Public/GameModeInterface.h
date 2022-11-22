@@ -25,11 +25,8 @@ class DREAMATETESTTASK_API IGameModeInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void OnPlayerCharacterDeath() = 0;
 
-	virtual void OnEnemyCharacterDeath() = 0;
-
-	virtual void AddToEnemyArray() = 0;
+	virtual void CharacterSpawn(ACharacter* Character) = 0;
 
 	virtual void Victory() const = 0;
 

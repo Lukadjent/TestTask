@@ -4,25 +4,29 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
-#include "Enum/EAbilities.h"
+#include "Components/AbilitySetComponent.h"
+#include "Components/GASCharacterComponent.h"
 #include "GameFramework/Character.h"
 #include "GAS/AbilitySystemComponentInterface.h"
 #include "GAS/ASComponent.h"
 #include "GAS/AttributeSet/BaseAttributeSet.h"
 #include "Interfaces/Death.h"
+#include "Interfaces/MovementComponentInterface.h"
 #include "Inventory/InventoryInterface.h"
 #include "Inventory/InventoryTypes.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "GASBaseCharacter.generated.h"
 
+class UAbilitySet;
 class UInventoryComponent;
 
 UCLASS()
-class DREAMATETESTTASK_API AGASBaseCharacter : public ACharacter, public IAbilitySystemComponentInterface, public IInventoryInterface, public IDeath
+class DREAMATETESTTASK_API AGASBaseCharacter : public ACharacter, public IAbilitySystemComponentInterface, public IInventoryInterface, public IDeath, public IMovementComponentInterface
 {
 	GENERATED_BODY()
 
 protected:
+	
 	AGASBaseCharacter();
 	
 	virtual void BeginPlay() override;
@@ -40,28 +44,15 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UASComponent> AbilitySystemComponent;
-
-#pragma endregion
 	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UBaseAttributeSet> AttributeSet;
 
-	//Initialize attributes, Stamina regeneration
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	TArray<TSubclassOf<class UGameplayEffect>> StartupEffects;
-
-	void InitializeDefaultAttributesAndEffects();
-	
-	void OnMovementSpeedChange(const FOnAttributeChangeData& Data);
-
-	//On add or remove immobile tag
-	virtual void ImmobileTagChanged(const FGameplayTag CallbackTag, int32 NewCount) PURE_VIRTUAL(AGASBaseCharacter::ImmobileTagChanged, );
-
-	void SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item);
+#pragma endregion 
 
 public:
-	virtual void NotifyDeath_Implementation() const override;
 
+	virtual void NotifyDeath_Implementation() const override;
 
 #pragma region COMPONENT_GETTERS
 
@@ -69,7 +60,11 @@ public:
 	
 	virtual UInventoryComponent* GetInventoryComponent() const override;
 
-	UChildActorComponent* GetWeaponComponent() const;
+	virtual UChildActorComponent* GetWeaponComponent() const override;
+
+	virtual UBaseAttributeSet* GetAttributeSet() const override;
+
+	virtual UCharacterMovementComponent* GetCharacterMovementComponent() const override;
 
 #pragma endregion
 	

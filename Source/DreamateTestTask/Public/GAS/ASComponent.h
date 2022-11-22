@@ -28,9 +28,14 @@ protected:
 	virtual void OnGiveAbility(FGameplayAbilitySpec& AbilitySpec) override;
 
 	virtual void OnRemoveAbility(FGameplayAbilitySpec& AbilitySpec) override;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	TArray<TSubclassOf<class UGameplayEffect>> StartupEffects;
 	
 public:
 
+	void SlottedItemChanged(FItemSlot ItemSlot, UItemData* Item);
+	
 	//Remove ability when slotted item changes
 	UFUNCTION(BlueprintCallable, Category = "Ability")
 	void RemoveSlottedGameplayAbilities(FItemSlot InSlot);
@@ -42,6 +47,8 @@ public:
 	UFUNCTION()
 	void FillSlottedAbilitySpecs(TMap<FItemSlot, FGameplayAbilitySpec>& SlottedAbilitySpecs);
 
-	void BindAttributeToWidget(FGameplayAttribute Attribute, FGameplayAttribute AttributeMax, TScriptInterface<IAttributesWidgetInterface> Widget) const;
+	void InitializeDefaultAttributesAndEffects();
+	
+	
 	
 };

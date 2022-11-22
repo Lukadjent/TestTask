@@ -7,14 +7,14 @@ void UAbilitySet::GiveAbilities(UASComponent* AbilitySystemComponent) const
 {
 	for (TSoftClassPtr<UGameplayAbility> Ability : PassiveAbilities)
 	{
-		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.Get(), 0, -10));
+		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.LoadSynchronous(), 0, -10));
 	}
 	
 	for (const FGameplayAbilityInfo& AbilityInfo : Abilities)
 	{
 		if (AbilityInfo.bShouldBeGivenOnSpawn)
 		{
-			AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(AbilityInfo.GameplayAbilityClass.Get(), 0));
+			AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(AbilityInfo.GameplayAbilityClass.LoadSynchronous(), 0, 0));
 		}
 	}
 }
@@ -26,9 +26,9 @@ void UAbilitySet::BindAbility(UAbilityBindingInputComponent* InputComponent, FGa
 
 	for (const FGameplayAbilityInfo& BindInfo : Abilities)
 	{
-		if (BindInfo.GameplayAbilityClass == Spec.Ability->GetClass() || Spec.Ability->GetClass()->IsChildOf(BindInfo.GameplayAbilityClass.Get()))
+		if (BindInfo.GameplayAbilityClass.LoadSynchronous() == Spec.Ability->GetClass() || Spec.Ability->GetClass()->IsChildOf(BindInfo.GameplayAbilityClass.LoadSynchronous()))
 		{
-			InputComponent->SetInputBinding(BindInfo.InputAction.Get(), Spec);
+			InputComponent->SetInputBinding(BindInfo.InputAction.LoadSynchronous(), Spec);
 		}
 	}
 }

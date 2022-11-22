@@ -15,11 +15,11 @@ class DREAMATETESTTASK_API AMainGameMode : public AGameModeBase, public IGameMod
 {
 	GENERATED_BODY()
 
-	virtual void OnPlayerCharacterDeath()  override;
+	void OnPlayerCharacterDeath();
 
-	virtual void OnEnemyCharacterDeath()  override;
+	void OnEnemyCharacterDeath();
 
-	virtual void AddToEnemyArray() override;
+	virtual void CharacterSpawn(ACharacter* Character) override;
 	
 	virtual void Victory() const override;
 	
